@@ -3,8 +3,10 @@ using Engine.Domain.ValueObjects;
 
 namespace Engine.Application.Commands;
 
-public sealed class RenameNodeCommand : EditorCommand
+public sealed class RenameNodeCommand : UndoableEditorCommand
 {
+    private string? _previousName;
+
     public RenameNodeCommand(DocumentNodeId nodeId, string newName) : base("document.node.rename")
     {
         if (nodeId == default)
@@ -28,6 +30,18 @@ public sealed class RenameNodeCommand : EditorCommand
     public override void Execute(CommandContext context)
     {
         var node = context.Document.GetNode(NodeId);
+        _previousName = node.Name;
         node.Rename(NewName);
+    }
+
+    public override void Undo(CommandContext context)
+    {
+        if (_previousName is null)
+        {
+            throw new InvalidOperationException("Cannot undo rename before execute completes successfully.");
+        }
+
+        var node = context.Document.GetNode(NodeId);
+        node.Rename(_previousName);
     }
 }
