@@ -37,9 +37,9 @@ public sealed class EditorDocumentTests
         var document = new EditorDocument(DocumentId.New(), new CanvasSize(100, 100));
         var id = LayerId.New();
 
-        document.AddLayer(new Layer(id, "A", visibility: true));
+        document.AddLayer(new Layer(id, "A", visibility: true, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal));
 
-        Assert.Throws<InvalidOperationException>(() => document.AddLayer(new Layer(id, "B", visibility: false)));
+        Assert.Throws<InvalidOperationException>(() => document.AddLayer(new Layer(id, "B", visibility: false, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal)));
     }
 
     [Fact]

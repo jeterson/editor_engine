@@ -29,7 +29,7 @@ public sealed class EditorDocument
 
     public LayerId AddLayer(string name, bool visibility = true)
     {
-        var layer = new Layer(LayerId.New(), name, visibility);
+        var layer = new Layer(LayerId.New(), name, visibility, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal);
         _layers.Add(layer);
         return layer.Id;
     }
