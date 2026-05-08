@@ -20,37 +20,37 @@ public sealed class EditorDocumentTests
     }
 
     [Fact]
-    public void RemoveLayer_RemovesExistingLayer()
+    public void AddAndRemoveNode_MaintainsRootHierarchy()
     {
         var document = new EditorDocument(DocumentId.New(), new CanvasSize(800, 600));
-        var layerId = document.AddLayer("To Remove", new AssetReference(AssetId.New()));
+        var groupId = document.AddLayerGroup("Group");
 
-        var removed = document.RemoveLayer(layerId);
+        var removed = document.RemoveNode(groupId);
 
         Assert.True(removed);
-        Assert.False(document.EnumerateLayers().Any());
+        Assert.Empty(document.EnumerateNodes());
     }
 
     [Fact]
-    public void AddLayer_WithDuplicateId_ThrowsInvalidOperationException()
+    public void AddNode_WithDuplicateId_ThrowsInvalidOperationException()
     {
         var document = new EditorDocument(DocumentId.New(), new CanvasSize(100, 100));
         var id = LayerId.New();
 
-        document.AddLayer(new Layer(id, "A", visibility: true, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal, new AssetReference(AssetId.New())));
+        document.AddNode(new Layer(id, "A", visibility: true, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal, new AssetReference(AssetId.New())));
 
-        Assert.Throws<InvalidOperationException>(() => document.AddLayer(new Layer(id, "B", visibility: false, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal, new AssetReference(AssetId.New()))));
+        Assert.Throws<InvalidOperationException>(() => document.AddNode(new Layer(id, "B", visibility: false, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal, new AssetReference(AssetId.New()))));
     }
 
     [Fact]
-    public void EnumerateLayers_ReturnsReadOnlyCollectionView()
+    public void EnumerateNodes_ReturnsReadOnlyCollectionView()
     {
         var document = new EditorDocument(DocumentId.New(), new CanvasSize(1200, 900));
         document.AddLayer("L1", new AssetReference(AssetId.New()));
 
-        var layers = document.EnumerateLayers();
+        var nodes = document.EnumerateNodes();
 
-        Assert.IsAssignableFrom<IReadOnlyList<Layer>>(layers);
-        Assert.False(layers is List<Layer>);
+        Assert.IsAssignableFrom<IReadOnlyList<DocumentNode>>(nodes);
+        Assert.False(nodes is List<DocumentNode>);
     }
 }

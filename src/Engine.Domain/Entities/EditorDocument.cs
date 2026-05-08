@@ -8,8 +8,8 @@ namespace Engine.Domain.Entities;
 /// </summary>
 public sealed class EditorDocument
 {
-    private readonly List<Layer> _layers = new();
-    private readonly ReadOnlyCollection<Layer> _readOnlyLayers;
+    private readonly List<DocumentNode> _nodes = new();
+    private readonly ReadOnlyCollection<DocumentNode> _readOnlyNodes;
 
     public EditorDocument(DocumentId id, CanvasSize canvasSize)
     {
@@ -20,7 +20,7 @@ public sealed class EditorDocument
 
         Id = id;
         CanvasSize = canvasSize;
-        _readOnlyLayers = _layers.AsReadOnly();
+        _readOnlyNodes = _nodes.AsReadOnly();
     }
 
     public DocumentId Id { get; }
@@ -30,20 +30,32 @@ public sealed class EditorDocument
     public LayerId AddLayer(string name, AssetReference assetReference, bool visibility = true)
     {
         var layer = new Layer(LayerId.New(), name, visibility, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal, assetReference);
-        _layers.Add(layer);
+        AddNode(layer);
         return layer.Id;
     }
 
-    public void AddLayer(Layer layer)
+    public Guid AddLayerGroup(string name, bool visibility = true)
     {
-        ArgumentNullException.ThrowIfNull(layer);
+        var group = new LayerGroup(Guid.NewGuid(), name, visibility);
+        AddNode(group);
+        return group.Id;
+    }
 
-        if (_layers.Any(existing => existing.Id == layer.Id))
+    public void AddNode(DocumentNode node)
+    {
+        ArgumentNullException.ThrowIfNull(node);
+
+        if (node.Parent is not null)
         {
-            throw new InvalidOperationException($"Layer with id '{layer.Id}' already exists.");
+            throw new InvalidOperationException("Root nodes must not have a parent.");
         }
 
-        _layers.Add(layer);
+        if (_nodes.Any(existing => existing.Id == node.Id))
+        {
+            throw new InvalidOperationException($"Node with id '{node.Id}' already exists.");
+        }
+
+        _nodes.Add(node);
     }
 
     public bool RemoveLayer(LayerId layerId)
@@ -53,13 +65,25 @@ public sealed class EditorDocument
             throw new ArgumentException("Layer id must be non-default.", nameof(layerId));
         }
 
-        var index = _layers.FindIndex(x => x.Id == layerId);
+        var index = _nodes.FindIndex(x => x is Layer layer && layer.Id == layerId);
         if (index < 0)
         {
             return false;
         }
 
-        _layers.RemoveAt(index);
+        _nodes.RemoveAt(index);
+        return true;
+    }
+
+    public bool RemoveNode(Guid nodeId)
+    {
+        var index = _nodes.FindIndex(x => x.Id == nodeId);
+        if (index < 0)
+        {
+            return false;
+        }
+
+        _nodes.RemoveAt(index);
         return true;
     }
 
@@ -70,7 +94,7 @@ public sealed class EditorDocument
             throw new ArgumentException("Layer id must be non-default.", nameof(layerId));
         }
 
-        var layer = _layers.FirstOrDefault(x => x.Id == layerId);
+        var layer = _nodes.OfType<Layer>().FirstOrDefault(x => x.Id == layerId);
         if (layer is null)
         {
             throw new KeyNotFoundException($"Layer with id '{layerId}' was not found.");
@@ -79,5 +103,7 @@ public sealed class EditorDocument
         return layer;
     }
 
-    public IReadOnlyList<Layer> EnumerateLayers() => _readOnlyLayers;
+    public IReadOnlyList<Layer> EnumerateLayers() => _nodes.OfType<Layer>().ToArray();
+
+    public IReadOnlyList<DocumentNode> EnumerateNodes() => _readOnlyNodes;
 }
