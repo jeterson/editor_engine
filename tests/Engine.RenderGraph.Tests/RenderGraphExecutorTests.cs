@@ -1,3 +1,4 @@
+using Engine.Abstractions;
 using Engine.Domain.ValueObjects;
 using Xunit;
 
@@ -90,9 +91,12 @@ public sealed class RenderGraphExecutorTests
         public ValueTask<RenderResult> ExecuteNodeAsync(RenderNode node, RenderExecutionContext context, CancellationToken cancellationToken)
         {
             ExecutedNodeIds.Add(node.Id);
-            return ValueTask.FromResult(new RenderResult(node.Id, $"payload-{ExecutedNodeIds.Count}"));
+            var descriptor = new RenderSurfaceDescriptor(64, 64, PixelFormat.Rgba8, isHighPrecision: false, RenderResourceLifetime.Transient);
+            return ValueTask.FromResult(new RenderResult(node.Id, new FakeRenderSurface(descriptor)));
         }
 
         public void Reset() => ExecutedNodeIds.Clear();
+
+        private sealed record FakeRenderSurface(RenderSurfaceDescriptor Descriptor) : IRenderSurface;
     }
 }

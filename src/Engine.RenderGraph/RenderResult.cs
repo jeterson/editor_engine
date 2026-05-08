@@ -1,12 +1,13 @@
+using Engine.Abstractions;
+
 namespace Engine.RenderGraph;
 
 /// <summary>
 /// Backend-agnostic result produced by a render node execution.
-/// Carries an optional payload token that concrete infrastructure backends may interpret.
 /// </summary>
 public sealed class RenderResult
 {
-    public RenderResult(RenderNodeId nodeId, object? backendPayload = null)
+    public RenderResult(RenderNodeId nodeId, IRenderSurface surface)
     {
         if (nodeId == default)
         {
@@ -14,21 +15,21 @@ public sealed class RenderResult
         }
 
         NodeId = nodeId;
-        BackendPayload = backendPayload;
+        Surface = surface ?? throw new ArgumentNullException(nameof(surface));
     }
 
     public RenderNodeId NodeId { get; }
 
-    public object? BackendPayload { get; }
+    public IRenderSurface Surface { get; }
 
     public CachedRenderResult ToCached(RenderCacheKey cacheKey, DateTimeOffset createdAtUtc)
     {
-        return new CachedRenderResult(NodeId, cacheKey, createdAtUtc, BackendPayload);
+        return new CachedRenderResult(NodeId, cacheKey, createdAtUtc, Surface);
     }
 
     public static RenderResult FromCached(CachedRenderResult cached)
     {
         ArgumentNullException.ThrowIfNull(cached);
-        return new RenderResult(cached.NodeId, cached.BackendPayload);
+        return new RenderResult(cached.NodeId, cached.Surface);
     }
 }
