@@ -1,3 +1,5 @@
+using Xunit;
+
 namespace Engine.RenderGraph.Tests;
 
 public sealed class SmokeTests

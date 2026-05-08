@@ -1,3 +1,5 @@
+using Xunit;
+
 namespace Engine.Application.Tests;
 
 public sealed class SmokeTests
