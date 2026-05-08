@@ -7,16 +7,16 @@ namespace Engine.Domain.Entities;
 /// </summary>
 public sealed class EffectStack
 {
-    private readonly List<LayerEffect> _effects;
+    private readonly List<Effect> _effects;
 
     public EffectStack()
     {
-        _effects = new List<LayerEffect>();
+        _effects = new List<Effect>();
     }
 
-    public IReadOnlyList<LayerEffect> Effects => _effects;
+    public IReadOnlyList<Effect> Effects => _effects;
 
-    public void Add(LayerEffect effect)
+    public void Add(Effect effect)
     {
         ArgumentNullException.ThrowIfNull(effect);
 
