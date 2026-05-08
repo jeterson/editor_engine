@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="../Engine.Abstractions/Engine.Abstractions.csproj" />
+    <ProjectReference Include="../Engine.Shared/Engine.Shared.csproj" />
+  </ItemGroup>
+</Project>
