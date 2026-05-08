@@ -39,6 +39,8 @@ public sealed class Layer
         Transform = transform;
         Opacity = opacity;
         BlendMode = blendMode;
+        AssetReference = assetReference;
+        EffectStack = new EffectStack();
     }
 
     public LayerId Id { get; }
@@ -54,6 +56,8 @@ public sealed class Layer
     public BlendMode BlendMode { get; private set; }
 
     public AssetReference AssetReference { get; private set; }
+
+    public EffectStack EffectStack { get; }
 
     public void Rename(string name)
     {

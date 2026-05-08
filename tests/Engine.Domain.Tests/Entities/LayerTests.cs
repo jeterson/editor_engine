@@ -23,6 +23,8 @@ public sealed class LayerTests
         Assert.Equal(transform, layer.Transform);
         Assert.Equal(new Opacity(0.4d), layer.Opacity);
         Assert.Equal(BlendMode.Multiply, layer.BlendMode);
+        Assert.NotNull(layer.EffectStack);
+        Assert.Empty(layer.EffectStack.Effects);
     }
 
     [Fact]
