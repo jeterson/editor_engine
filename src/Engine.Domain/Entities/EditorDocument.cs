@@ -27,9 +27,9 @@ public sealed class EditorDocument
 
     public CanvasSize CanvasSize { get; }
 
-    public LayerId AddLayer(string name, bool visibility = true)
+    public LayerId AddLayer(string name, AssetReference assetReference, bool visibility = true)
     {
-        var layer = new Layer(LayerId.New(), name, visibility, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal);
+        var layer = new Layer(LayerId.New(), name, visibility, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal, assetReference);
         _layers.Add(layer);
         return layer.Id;
     }
