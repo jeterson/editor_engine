@@ -26,4 +26,10 @@ public abstract class RenderNode
     public RenderNodeId Id { get; }
 
     public IReadOnlyList<RenderNodeId> Dependencies => _dependencies;
+
+    public virtual IReadOnlyList<KeyValuePair<string, string>> GetCacheParameters()
+    {
+        return Array.Empty<KeyValuePair<string, string>>();
+    }
 }
+
