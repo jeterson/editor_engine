@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="../Engine.Domain/Engine.Domain.csproj" />
+    <ProjectReference Include="../Engine.Abstractions/Engine.Abstractions.csproj" />
+    <ProjectReference Include="../Engine.RenderGraph/Engine.RenderGraph.csproj" />
+    <ProjectReference Include="../Engine.Shared/Engine.Shared.csproj" />
+  </ItemGroup>
+</Project>

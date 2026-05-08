@@ -1,0 +1,42 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Domain", "src/Engine.Domain/Engine.Domain.csproj", "{0C95B26E-89AE-4695-8FD2-FBC8AF89F8FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Application", "src/Engine.Application/Engine.Application.csproj", "{BB6C645B-22A8-4F95-AB45-FD4B3EAFA0A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Abstractions", "src/Engine.Abstractions/Engine.Abstractions.csproj", "{3F2A7095-C7A0-4D95-9A5A-9F8EEA6E9578}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.RenderGraph", "src/Engine.RenderGraph/Engine.RenderGraph.csproj", "{5397FD6A-9294-4A95-9586-EA6F6DF04F8C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Shared", "src/Engine.Shared/Engine.Shared.csproj", "{00A350FC-E86F-494C-85A0-B0EA995A72D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Infrastructure", "src/Engine.Infrastructure/Engine.Infrastructure.csproj", "{586B58D0-4892-425D-9FD8-A3F5F06D0D9C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Infrastructure.CPU", "src/Engine.Infrastructure.CPU/Engine.Infrastructure.CPU.csproj", "{33485FC1-C2B2-4C8B-B0CF-C8BA3F9E9D8D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Infrastructure.Skia", "src/Engine.Infrastructure.Skia/Engine.Infrastructure.Skia.csproj", "{24C9279D-8F0E-4D45-977D-3D136A0D85A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Infrastructure.Win2D", "src/Engine.Infrastructure.Win2D/Engine.Infrastructure.Win2D.csproj", "{D8B8F5D5-0C56-44D7-B334-5CD5CBCA132B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Domain.Tests", "tests/Engine.Domain.Tests/Engine.Domain.Tests.csproj", "{346C9B93-43A8-4272-BB5A-CAAE4C25A6B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Application.Tests", "tests/Engine.Application.Tests/Engine.Application.Tests.csproj", "{DA9CA4D3-9888-4DDC-BF7E-4A659704F0CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.RenderGraph.Tests", "tests/Engine.RenderGraph.Tests/Engine.RenderGraph.Tests.csproj", "{376EF2A4-615A-4EA6-B0F7-754D405282E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Architecture.Tests", "tests/Engine.Architecture.Tests/Engine.Architecture.Tests.csproj", "{2AF4D24D-3596-4C6A-B24A-B381D0582131}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0C95B26E-89AE-4695-8FD2-FBC8AF89F8FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C95B26E-89AE-4695-8FD2-FBC8AF89F8FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C95B26E-89AE-4695-8FD2-FBC8AF89F8FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C95B26E-89AE-4695-8FD2-FBC8AF89F8FD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
