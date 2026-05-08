@@ -1,11 +1,13 @@
+using Engine.Abstractions;
+
 namespace Engine.RenderGraph;
 
 /// <summary>
-/// Backend-agnostic cached render payload. Real surfaces/resources are intentionally deferred to infrastructure backends.
+/// Backend-agnostic cached render surface metadata.
 /// </summary>
 public sealed class CachedRenderResult
 {
-    public CachedRenderResult(RenderNodeId nodeId, RenderCacheKey cacheKey, DateTimeOffset createdAtUtc, object? backendPayload = null)
+    public CachedRenderResult(RenderNodeId nodeId, RenderCacheKey cacheKey, DateTimeOffset createdAtUtc, IRenderSurface surface)
     {
         if (nodeId == default)
         {
@@ -15,7 +17,7 @@ public sealed class CachedRenderResult
         NodeId = nodeId;
         CacheKey = cacheKey;
         CreatedAtUtc = createdAtUtc;
-        BackendPayload = backendPayload;
+        Surface = surface ?? throw new ArgumentNullException(nameof(surface));
     }
 
     public RenderNodeId NodeId { get; }
@@ -24,8 +26,5 @@ public sealed class CachedRenderResult
 
     public DateTimeOffset CreatedAtUtc { get; }
 
-    /// <summary>
-    /// Optional future hook for backend-specific payload types (CPU buffer, GPU texture handle wrapper, etc.).
-    /// </summary>
-    public object? BackendPayload { get; }
+    public IRenderSurface Surface { get; }
 }

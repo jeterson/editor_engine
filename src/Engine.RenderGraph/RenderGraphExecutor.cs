@@ -50,7 +50,7 @@ public sealed class RenderGraphExecutor
             var result = await _backend.ExecuteNodeAsync(node, context, cancellationToken);
             var normalizedResult = result.NodeId == nodeId
                 ? result
-                : new RenderResult(nodeId, result.BackendPayload);
+                : new RenderResult(nodeId, result.Surface);
 
             context.SetResult(nodeId, normalizedResult);
             context.Cache.Set(normalizedResult.ToCached(key, DateTimeOffset.UtcNow));

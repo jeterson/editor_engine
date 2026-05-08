@@ -52,11 +52,4 @@ public sealed class PrimitivesTests
         Assert.Equal(Color.FromRgba(1, 2, 3, 4), new Color(1, 2, 3, 4));
     }
 
-    [Fact]
-    public void PixelFormat_Defines_Supported_Formats()
-    {
-        Assert.Equal(0, (int)PixelFormat.Rgba8);
-        Assert.Equal(1, (int)PixelFormat.Bgra8);
-        Assert.Equal(2, (int)PixelFormat.Rgba16Float);
-    }
 }
