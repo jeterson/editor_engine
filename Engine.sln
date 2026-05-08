@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.RenderGraph.Tests", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Architecture.Tests", "tests/Engine.Architecture.Tests/Engine.Architecture.Tests.csproj", "{2AF4D24D-3596-4C6A-B24A-B381D0582131}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Shared.Tests", "tests/Engine.Shared.Tests/Engine.Shared.Tests.csproj", "{A1F1D7C2-83D3-4B95-996A-CCB4E4CC6A12}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,5 +40,9 @@ Global
 		{0C95B26E-89AE-4695-8FD2-FBC8AF89F8FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C95B26E-89AE-4695-8FD2-FBC8AF89F8FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C95B26E-89AE-4695-8FD2-FBC8AF89F8FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1F1D7C2-83D3-4B95-996A-CCB4E4CC6A12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1F1D7C2-83D3-4B95-996A-CCB4E4CC6A12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1F1D7C2-83D3-4B95-996A-CCB4E4CC6A12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1F1D7C2-83D3-4B95-996A-CCB4E4CC6A12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
