@@ -10,8 +10,8 @@ public sealed class EffectStackTests
     public void Add_AddsEffectsPreservingOrder()
     {
         var stack = new EffectStack();
-        var first = new LayerEffect(EffectId.New(), "blur", true, new Dictionary<string, object?> { ["radius"] = 4d });
-        var second = new LayerEffect(EffectId.New(), "brightness", true, new Dictionary<string, object?> { ["amount"] = 0.2d });
+        var first = new BlurEffect(EffectId.New(), true, 4d);
+        var second = new BrightnessEffect(EffectId.New(), true, 0.2d);
 
         stack.Add(first);
         stack.Add(second);
@@ -26,9 +26,9 @@ public sealed class EffectStackTests
     public void Remove_RemovesEffectAndPreservesRemainingOrder()
     {
         var stack = new EffectStack();
-        var first = new LayerEffect(EffectId.New(), "blur", true);
-        var second = new LayerEffect(EffectId.New(), "levels", true);
-        var third = new LayerEffect(EffectId.New(), "hue", true);
+        var first = new BlurEffect(EffectId.New(), true, 4d);
+        var second = new BrightnessEffect(EffectId.New(), true, 0.1d);
+        var third = new ContrastEffect(EffectId.New(), true, 0.3d);
 
         stack.Add(first);
         stack.Add(second);
@@ -46,9 +46,9 @@ public sealed class EffectStackTests
     public void Reorder_MovesEffectToTargetIndex()
     {
         var stack = new EffectStack();
-        var first = new LayerEffect(EffectId.New(), "blur", true);
-        var second = new LayerEffect(EffectId.New(), "levels", true);
-        var third = new LayerEffect(EffectId.New(), "hue", true);
+        var first = new BlurEffect(EffectId.New(), true, 4d);
+        var second = new BrightnessEffect(EffectId.New(), true, 0.1d);
+        var third = new ContrastEffect(EffectId.New(), true, 0.3d);
 
         stack.Add(first);
         stack.Add(second);
@@ -67,7 +67,7 @@ public sealed class EffectStackTests
     public void SetEnabled_UpdatesEffectState()
     {
         var stack = new EffectStack();
-        var effect = new LayerEffect(EffectId.New(), "blur", true);
+        var effect = new BlurEffect(EffectId.New(), true, 8d);
         stack.Add(effect);
 
         stack.SetEnabled(effect.Id, false);
@@ -80,9 +80,9 @@ public sealed class EffectStackTests
     {
         var stack = new EffectStack();
         var effectId = EffectId.New();
-        stack.Add(new LayerEffect(effectId, "blur", true));
+        stack.Add(new BlurEffect(effectId, true, 4d));
 
-        Assert.Throws<InvalidOperationException>(() => stack.Add(new LayerEffect(effectId, "levels", true)));
+        Assert.Throws<InvalidOperationException>(() => stack.Add(new BrightnessEffect(effectId, true, 0.2d)));
     }
 
     [Fact]
@@ -97,7 +97,7 @@ public sealed class EffectStackTests
     public void Reorder_WithOutOfRangeIndex_Throws()
     {
         var stack = new EffectStack();
-        var effect = new LayerEffect(EffectId.New(), "blur", true);
+        var effect = new BlurEffect(EffectId.New(), true, 4d);
         stack.Add(effect);
 
         Assert.Throws<ArgumentOutOfRangeException>(() => stack.Reorder(effect.Id, 2));
