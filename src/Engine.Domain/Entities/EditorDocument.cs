@@ -92,6 +92,23 @@ public sealed class EditorDocument
         return true;
     }
 
+
+    public DocumentNode GetNode(DocumentNodeId nodeId)
+    {
+        if (nodeId == default)
+        {
+            throw new ArgumentException("Node id must be non-default.", nameof(nodeId));
+        }
+
+        var node = _nodes.FirstOrDefault(x => x.Id == nodeId);
+        if (node is null)
+        {
+            throw new KeyNotFoundException($"Node with id '{nodeId}' was not found.");
+        }
+
+        return node;
+    }
+
     public Layer GetLayer(DocumentNodeId layerId)
     {
         if (layerId == default)
