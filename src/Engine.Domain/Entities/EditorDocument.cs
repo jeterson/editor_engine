@@ -1,5 +1,5 @@
-using System.Collections.ObjectModel;
 using Engine.Domain.ValueObjects;
+using System.Collections.ObjectModel;
 
 namespace Engine.Domain.Entities;
 
@@ -27,16 +27,16 @@ public sealed class EditorDocument
 
     public CanvasSize CanvasSize { get; }
 
-    public LayerId AddLayer(string name, AssetReference assetReference, bool visibility = true)
+    public DocumentNodeId AddLayer(string name, AssetReference assetReference, bool visibility = true)
     {
-        var layer = new Layer(LayerId.New(), name, visibility, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal, assetReference);
+        var layer = new Layer(DocumentNodeId.New(), name, visibility, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal, assetReference);
         AddNode(layer);
         return layer.Id;
     }
 
-    public Guid AddLayerGroup(string name, bool visibility = true)
+    public DocumentNodeId AddLayerGroup(string name, bool visibility = true)
     {
-        var group = new LayerGroup(Guid.NewGuid(), name, visibility);
+        var group = new LayerGroup(DocumentNodeId.New(), name, visibility);
         AddNode(group);
         return group.Id;
     }
@@ -58,7 +58,7 @@ public sealed class EditorDocument
         _nodes.Add(node);
     }
 
-    public bool RemoveLayer(LayerId layerId)
+    public bool RemoveLayer(DocumentNodeId layerId)
     {
         if (layerId == default)
         {
@@ -75,7 +75,7 @@ public sealed class EditorDocument
         return true;
     }
 
-    public bool RemoveNode(Guid nodeId)
+    public bool RemoveNode(DocumentNodeId nodeId)
     {
         var index = _nodes.FindIndex(x => x.Id == nodeId);
         if (index < 0)
@@ -87,7 +87,7 @@ public sealed class EditorDocument
         return true;
     }
 
-    public Layer GetLayer(LayerId layerId)
+    public Layer GetLayer(DocumentNodeId layerId)
     {
         if (layerId == default)
         {

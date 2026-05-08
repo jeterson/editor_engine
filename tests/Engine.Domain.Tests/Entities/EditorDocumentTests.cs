@@ -35,7 +35,7 @@ public sealed class EditorDocumentTests
     public void AddNode_WithDuplicateId_ThrowsInvalidOperationException()
     {
         var document = new EditorDocument(DocumentId.New(), new CanvasSize(100, 100));
-        var id = LayerId.New();
+        var id = DocumentNodeId.New();
 
         document.AddNode(new Layer(id, "A", visibility: true, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal, new AssetReference(AssetId.New())));
 

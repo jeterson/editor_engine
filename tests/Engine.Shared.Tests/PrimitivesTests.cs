@@ -1,3 +1,5 @@
+using Xunit;
+
 namespace Engine.Shared.Tests;
 
 public sealed class PrimitivesTests

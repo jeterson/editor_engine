@@ -9,7 +9,7 @@ public sealed class StronglyTypedIdsTests
     public void RequiredIds_New_GeneratesNonDefaultValues()
     {
         Assert.NotEqual(default, DocumentId.New());
-        Assert.NotEqual(default, LayerId.New());
+        Assert.NotEqual(default, DocumentNodeId.New());
         Assert.NotEqual(default, AssetId.New());
         Assert.NotEqual(default, EffectId.New());
     }
@@ -28,7 +28,7 @@ public sealed class StronglyTypedIdsTests
 
         var documentA = new DocumentId(guid);
         var documentB = new DocumentId(guid);
-        var layer = new LayerId(guid);
+        var layer = new DocumentNodeId(guid);
 
         Assert.Equal(documentA, documentB);
         Assert.True(documentA == documentB);
@@ -36,7 +36,7 @@ public sealed class StronglyTypedIdsTests
 
         Assert.Equal(documentA.Value, layer.Value);
         Assert.IsType<DocumentId>(documentA);
-        Assert.IsType<LayerId>(layer);
+        Assert.IsType<DocumentNodeId>(layer);
     }
 
     [Fact]
@@ -45,7 +45,7 @@ public sealed class StronglyTypedIdsTests
         var guid = Guid.NewGuid();
 
         Assert.Equal(guid.ToString(), new DocumentId(guid).ToString());
-        Assert.Equal(guid.ToString(), new LayerId(guid).ToString());
+        Assert.Equal(guid.ToString(), new DocumentNodeId(guid).ToString());
         Assert.Equal(guid.ToString(), new AssetId(guid).ToString());
         Assert.Equal(guid.ToString(), new EffectId(guid).ToString());
         Assert.Equal(guid.ToString(), new RenderNodeId(guid).ToString());
@@ -61,8 +61,8 @@ public sealed class StronglyTypedIdsTests
         Assert.True(DocumentId.TryParse(text, out var documentId));
         Assert.Equal(new DocumentId(guid), documentId);
 
-        Assert.True(LayerId.TryParse(text, out var layerId));
-        Assert.Equal(new LayerId(guid), layerId);
+        Assert.True(DocumentNodeId.TryParse(text, out var layerId));
+        Assert.Equal(new DocumentNodeId(guid), layerId);
 
         Assert.True(AssetId.TryParse(text, out var assetId));
         Assert.Equal(new AssetId(guid), assetId);
@@ -85,7 +85,7 @@ public sealed class StronglyTypedIdsTests
         Assert.False(DocumentId.TryParse(invalid, out var documentId));
         Assert.Equal(default, documentId);
 
-        Assert.False(LayerId.TryParse(invalid, out var layerId));
+        Assert.False(DocumentNodeId.TryParse(invalid, out var layerId));
         Assert.Equal(default, layerId);
 
         Assert.False(AssetId.TryParse(invalid, out var assetId));

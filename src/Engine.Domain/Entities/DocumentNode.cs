@@ -1,3 +1,5 @@
+using Engine.Domain.ValueObjects;
+
 namespace Engine.Domain.Entities;
 
 /// <summary>
@@ -7,9 +9,9 @@ public abstract class DocumentNode
 {
     private DocumentNode? _parent;
 
-    protected DocumentNode(Guid id, string name, bool visibility)
+    protected DocumentNode(DocumentNodeId id, string name, bool visibility)
     {
-        if (id == Guid.Empty)
+        if (id == default)
         {
             throw new ArgumentException("Node id must be non-empty.", nameof(id));
         }
@@ -21,7 +23,7 @@ public abstract class DocumentNode
         Visibility = visibility;
     }
 
-    public Guid Id { get; }
+    public DocumentNodeId Id { get; }
 
     public string Name { get; private set; }
 

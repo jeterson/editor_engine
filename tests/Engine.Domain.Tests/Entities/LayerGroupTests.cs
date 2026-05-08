@@ -9,18 +9,18 @@ public sealed class LayerGroupTests
     [Fact]
     public void AddRemoveAndReorderChildren_PreservesOrder()
     {
-        var group = new LayerGroup(Guid.NewGuid(), "Root");
-        var first = new Layer(LayerId.New(), "A", true, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal, new AssetReference(AssetId.New()));
-        var second = new Layer(LayerId.New(), "B", true, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal, new AssetReference(AssetId.New()));
+        var group = new LayerGroup(DocumentNodeId.New(), "Root");
+        var first = new Layer(DocumentNodeId.New(), "A", true, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal, new AssetReference(AssetId.New()));
+        var second = new Layer(DocumentNodeId.New(), "B", true, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal, new AssetReference(AssetId.New()));
 
         group.AddChild(first);
         group.AddChild(second);
-        group.ReorderChild(second.Id.Value, 0);
+        group.ReorderChild(second.Id, 0);
 
-        Assert.Equal(second.Id.Value, group.Children[0].Id);
-        Assert.Equal(first.Id.Value, group.Children[1].Id);
+        Assert.Equal(second.Id, group.Children[0].Id);
+        Assert.Equal(first.Id, group.Children[1].Id);
 
-        var removed = group.RemoveChild(first.Id.Value);
+        var removed = group.RemoveChild(first.Id);
 
         Assert.True(removed);
         Assert.Single(group.Children);
@@ -29,9 +29,9 @@ public sealed class LayerGroupTests
     [Fact]
     public void AddChild_WithNestedGroups_SupportsHierarchy()
     {
-        var root = new LayerGroup(Guid.NewGuid(), "Root");
-        var childGroup = new LayerGroup(Guid.NewGuid(), "Child");
-        var leaf = new Layer(LayerId.New(), "Leaf", true, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal, new AssetReference(AssetId.New()));
+        var root = new LayerGroup(DocumentNodeId.New(), "Root");
+        var childGroup = new LayerGroup(DocumentNodeId.New(), "Child");
+        var leaf = new Layer(DocumentNodeId.New(), "Leaf", true, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal, new AssetReference(AssetId.New()));
 
         root.AddChild(childGroup);
         childGroup.AddChild(leaf);
@@ -43,8 +43,8 @@ public sealed class LayerGroupTests
     [Fact]
     public void AddChild_PreventsInvalidStateAndCycles()
     {
-        var root = new LayerGroup(Guid.NewGuid(), "Root");
-        var child = new LayerGroup(Guid.NewGuid(), "Child");
+        var root = new LayerGroup(DocumentNodeId.New(), "Root");
+        var child = new LayerGroup(DocumentNodeId.New(), "Child");
 
         root.AddChild(child);
 

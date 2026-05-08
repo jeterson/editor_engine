@@ -8,14 +8,13 @@ namespace Engine.Domain.Entities;
 public sealed class Layer : DocumentNode
 {
     public Layer(
-        LayerId id,
+        DocumentNodeId id,
         string name,
         bool visibility,
         LayerTransform transform,
         Opacity opacity,
         BlendMode blendMode,
-        AssetReference assetReference)
-    ) : base(id.Value, name, visibility)
+        AssetReference assetReference) : base(id, name, visibility)
     {
         if (id == default)
         {
@@ -29,15 +28,12 @@ public sealed class Layer : DocumentNode
             throw new ArgumentException("Layer asset reference must target a non-default asset id.", nameof(assetReference));
         }
 
-        Id = id;
         Transform = transform;
         Opacity = opacity;
         BlendMode = blendMode;
         AssetReference = assetReference;
         EffectStack = new EffectStack();
     }
-
-    public LayerId Id { get; }
 
     public LayerTransform Transform { get; private set; }
 

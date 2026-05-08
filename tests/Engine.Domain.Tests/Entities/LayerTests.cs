@@ -9,7 +9,7 @@ public sealed class LayerTests
     [Fact]
     public void UpdateProperties_UpdatesState()
     {
-        var layer = new Layer(LayerId.New(), "Layer", true, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal, new AssetReference(AssetId.New()));
+        var layer = new Layer(DocumentNodeId.New(), "Layer", true, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal, new AssetReference(AssetId.New()));
         var transform = new LayerTransform(100d, 200d, 2d, 2d, 30d);
 
         layer.Rename("Updated");
@@ -30,7 +30,7 @@ public sealed class LayerTests
     [Fact]
     public void SetBlendMode_WithInvalidEnum_Throws()
     {
-        var layer = new Layer(LayerId.New(), "Layer", true, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal, new AssetReference(AssetId.New()));
+        var layer = new Layer(DocumentNodeId.New(), "Layer", true, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal, new AssetReference(AssetId.New()));
 
         Assert.Throws<ArgumentOutOfRangeException>(() => layer.SetBlendMode((BlendMode)999));
     }
@@ -38,7 +38,7 @@ public sealed class LayerTests
     [Fact]
     public void SetAssetReference_UpdatesReference()
     {
-        var layer = new Layer(LayerId.New(), "Layer", true, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal, new AssetReference(AssetId.New()));
+        var layer = new Layer(DocumentNodeId.New(), "Layer", true, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal, new AssetReference(AssetId.New()));
         var newReference = new AssetReference(AssetId.New());
 
         layer.SetAssetReference(newReference);

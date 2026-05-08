@@ -1,3 +1,4 @@
+using Engine.Domain.ValueObjects;
 using System.Collections.ObjectModel;
 
 namespace Engine.Domain.Entities;
@@ -7,7 +8,7 @@ public sealed class LayerGroup : DocumentNode
     private readonly List<DocumentNode> _children = new();
     private readonly ReadOnlyCollection<DocumentNode> _readOnlyChildren;
 
-    public LayerGroup(Guid id, string name, bool visibility = true)
+    public LayerGroup(DocumentNodeId id, string name, bool visibility = true)
         : base(id, name, visibility)
     {
         _readOnlyChildren = _children.AsReadOnly();
@@ -49,7 +50,7 @@ public sealed class LayerGroup : DocumentNode
         node.SetParent(this);
     }
 
-    public bool RemoveChild(Guid nodeId)
+    public bool RemoveChild(DocumentNodeId nodeId)
     {
         var index = _children.FindIndex(x => x.Id == nodeId);
         if (index < 0)
@@ -63,7 +64,7 @@ public sealed class LayerGroup : DocumentNode
         return true;
     }
 
-    public void ReorderChild(Guid nodeId, int newIndex)
+    public void ReorderChild(DocumentNodeId nodeId, int newIndex)
     {
         if (newIndex < 0 || newIndex >= _children.Count)
         {
