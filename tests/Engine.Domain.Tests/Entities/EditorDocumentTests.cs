@@ -53,4 +53,23 @@ public sealed class EditorDocumentTests
         Assert.IsAssignableFrom<IReadOnlyList<DocumentNode>>(nodes);
         Assert.False(nodes is List<DocumentNode>);
     }
+
+    [Fact]
+    public void RemoveNode_RemovesNodeFromSelectionAndKeepsSelectionConsistent()
+    {
+        var document = new EditorDocument(DocumentId.New(), new CanvasSize(800, 600));
+        var first = document.AddLayer("A", new AssetReference(AssetId.New()));
+        var second = document.AddLayer("B", new AssetReference(AssetId.New()));
+
+        document.Selection.AddToSelection(first);
+        document.Selection.AddToSelection(second, makeActive: true);
+
+        var removed = document.RemoveNode(second);
+
+        Assert.True(removed);
+        Assert.False(document.Selection.IsSelected(second));
+        Assert.True(document.Selection.IsSelected(first));
+        Assert.Equal(first, document.Selection.ActiveNodeId);
+    }
+
 }
