@@ -13,7 +13,8 @@ public sealed class Layer
         bool visibility,
         LayerTransform transform,
         Opacity opacity,
-        BlendMode blendMode)
+        BlendMode blendMode,
+        AssetReference assetReference)
     {
         if (id == default)
         {
@@ -26,6 +27,11 @@ public sealed class Layer
         }
 
         ValidateBlendMode(blendMode);
+
+        if (assetReference.AssetId == default)
+        {
+            throw new ArgumentException("Layer asset reference must target a non-default asset id.", nameof(assetReference));
+        }
 
         Id = id;
         Name = name;
@@ -47,6 +53,8 @@ public sealed class Layer
 
     public BlendMode BlendMode { get; private set; }
 
+    public AssetReference AssetReference { get; private set; }
+
     public void Rename(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -62,6 +70,16 @@ public sealed class Layer
     public void SetTransform(LayerTransform transform) => Transform = transform;
 
     public void SetOpacity(Opacity opacity) => Opacity = opacity;
+
+    public void SetAssetReference(AssetReference assetReference)
+    {
+        if (assetReference.AssetId == default)
+        {
+            throw new ArgumentException("Layer asset reference must target a non-default asset id.", nameof(assetReference));
+        }
+
+        AssetReference = assetReference;
+    }
 
     public void SetBlendMode(BlendMode blendMode)
     {
