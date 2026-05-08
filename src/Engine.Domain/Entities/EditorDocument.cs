@@ -27,6 +27,8 @@ public sealed class EditorDocument
 
     public CanvasSize CanvasSize { get; }
 
+    public SelectionState Selection { get; } = new();
+
     public DocumentNodeId AddLayer(string name, AssetReference assetReference, bool visibility = true)
     {
         var layer = new Layer(DocumentNodeId.New(), name, visibility, LayerTransform.Identity, Opacity.Opaque, BlendMode.Normal, assetReference);
@@ -71,7 +73,9 @@ public sealed class EditorDocument
             return false;
         }
 
+        var removedNodeId = _nodes[index].Id;
         _nodes.RemoveAt(index);
+        Selection.RemoveFromSelection(removedNodeId);
         return true;
     }
 
@@ -84,6 +88,7 @@ public sealed class EditorDocument
         }
 
         _nodes.RemoveAt(index);
+        Selection.RemoveFromSelection(nodeId);
         return true;
     }
 
