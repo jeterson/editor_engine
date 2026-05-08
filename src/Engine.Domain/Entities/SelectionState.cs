@@ -109,6 +109,38 @@ public sealed class SelectionState
         ActiveNodeId = null;
     }
 
+    public void RestoreSelection(IReadOnlyList<DocumentNodeId> selectionOrder, DocumentNodeId? activeNodeId)
+    {
+        ArgumentNullException.ThrowIfNull(selectionOrder);
+
+        _selectedNodeIds.Clear();
+        _selectionOrder.Clear();
+
+        foreach (var nodeId in selectionOrder)
+        {
+            ValidateNodeId(nodeId);
+            if (_selectedNodeIds.Add(nodeId))
+            {
+                _selectionOrder.Add(nodeId);
+            }
+        }
+
+        if (activeNodeId is null)
+        {
+            ActiveNodeId = _selectionOrder.Count > 0 ? _selectionOrder[^1] : null;
+            return;
+        }
+
+        ValidateNodeId(activeNodeId.Value);
+
+        if (!_selectedNodeIds.Contains(activeNodeId.Value))
+        {
+            throw new InvalidOperationException("Active node must belong to selection.");
+        }
+
+        ActiveNodeId = activeNodeId;
+    }
+
     public bool ToggleSelection(DocumentNodeId nodeId, bool makeActiveWhenSelected = true)
     {
         ValidateNodeId(nodeId);

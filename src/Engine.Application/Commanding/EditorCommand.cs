@@ -19,3 +19,15 @@ public abstract class EditorCommand
 
     public abstract void Execute(CommandContext context);
 }
+
+/// <summary>
+/// Representa um comando de edição que pode reverter sua própria execução.
+/// </summary>
+public abstract class UndoableEditorCommand : EditorCommand
+{
+    protected UndoableEditorCommand(string semanticId) : base(semanticId)
+    {
+    }
+
+    public abstract void Undo(CommandContext context);
+}

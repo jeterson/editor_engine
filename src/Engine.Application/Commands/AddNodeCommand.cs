@@ -3,7 +3,7 @@ using Engine.Domain.Entities;
 
 namespace Engine.Application.Commands;
 
-public sealed class AddNodeCommand : EditorCommand
+public sealed class AddNodeCommand : UndoableEditorCommand
 {
     public AddNodeCommand(DocumentNode node) : base("document.node.add")
     {
@@ -16,5 +16,13 @@ public sealed class AddNodeCommand : EditorCommand
     public override void Execute(CommandContext context)
     {
         context.Document.AddNode(Node);
+    }
+
+    public override void Undo(CommandContext context)
+    {
+        if (!context.Document.RemoveNode(Node.Id))
+        {
+            throw new InvalidOperationException($"Node with id '{Node.Id}' was not found.");
+        }
     }
 }

@@ -60,6 +60,38 @@ public sealed class EditorDocument
         _nodes.Add(node);
     }
 
+    public void InsertNodeAt(int index, DocumentNode node)
+    {
+        ArgumentNullException.ThrowIfNull(node);
+
+        if (index < 0 || index > _nodes.Count)
+        {
+            throw new ArgumentOutOfRangeException(nameof(index));
+        }
+
+        if (node.Parent is not null)
+        {
+            throw new InvalidOperationException("Root nodes must not have a parent.");
+        }
+
+        if (_nodes.Any(existing => existing.Id == node.Id))
+        {
+            throw new InvalidOperationException($"Node with id '{node.Id}' already exists.");
+        }
+
+        _nodes.Insert(index, node);
+    }
+
+    public int IndexOfNode(DocumentNodeId nodeId)
+    {
+        if (nodeId == default)
+        {
+            throw new ArgumentException("Node id must be non-default.", nameof(nodeId));
+        }
+
+        return _nodes.FindIndex(x => x.Id == nodeId);
+    }
+
     public bool RemoveLayer(DocumentNodeId layerId)
     {
         if (layerId == default)
