@@ -19,5 +19,6 @@
   <ItemGroup>
     <ProjectReference Include="../../src/Engine.RenderGraph/Engine.RenderGraph.csproj" />
     <ProjectReference Include="../../src/Engine.Domain/Engine.Domain.csproj" />
+    <ProjectReference Include="../../src/Engine.Infrastructure.CPU/Engine.Infrastructure.CPU.csproj" />
   </ItemGroup>
 </Project>
