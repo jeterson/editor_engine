@@ -5,7 +5,7 @@ namespace Engine.Domain.Entities;
 /// <summary>
 /// Representa uma camada do documento.
 /// </summary>
-public sealed class Layer
+public sealed class Layer : DocumentNode
 {
     public Layer(
         LayerId id,
@@ -15,15 +15,11 @@ public sealed class Layer
         Opacity opacity,
         BlendMode blendMode,
         AssetReference assetReference)
+    ) : base(id.Value, name, visibility)
     {
         if (id == default)
         {
             throw new ArgumentException("Layer id must be non-default.", nameof(id));
-        }
-
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            throw new ArgumentException("Layer name must be provided.", nameof(name));
         }
 
         ValidateBlendMode(blendMode);
@@ -34,8 +30,6 @@ public sealed class Layer
         }
 
         Id = id;
-        Name = name;
-        Visibility = visibility;
         Transform = transform;
         Opacity = opacity;
         BlendMode = blendMode;
@@ -44,10 +38,6 @@ public sealed class Layer
     }
 
     public LayerId Id { get; }
-
-    public string Name { get; private set; }
-
-    public bool Visibility { get; private set; }
 
     public LayerTransform Transform { get; private set; }
 
@@ -58,18 +48,6 @@ public sealed class Layer
     public AssetReference AssetReference { get; private set; }
 
     public EffectStack EffectStack { get; }
-
-    public void Rename(string name)
-    {
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            throw new ArgumentException("Layer name must be provided.", nameof(name));
-        }
-
-        Name = name;
-    }
-
-    public void SetVisibility(bool visibility) => Visibility = visibility;
 
     public void SetTransform(LayerTransform transform) => Transform = transform;
 
