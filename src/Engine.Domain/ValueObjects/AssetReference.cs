@@ -1,5 +1,3 @@
-using Engine.Domain.ValueObjects;
-
 namespace Engine.Domain.ValueObjects;
 
 /// <summary>
@@ -7,7 +5,7 @@ namespace Engine.Domain.ValueObjects;
 /// </summary>
 public readonly record struct AssetReference
 {
-    public AssetReference(AssetId assetId)
+    public AssetReference(AssetId assetId, string path)
     {
         if (assetId == default)
         {
@@ -15,9 +13,11 @@ public readonly record struct AssetReference
         }
 
         AssetId = assetId;
+        Path = path;
     }
 
     public AssetId AssetId { get; }
+    public string Path { get; }
 
     public override string ToString() => AssetId.ToString();
 }
