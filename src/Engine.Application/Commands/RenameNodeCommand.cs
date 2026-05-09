@@ -1,4 +1,5 @@
 using Engine.Application.Commanding;
+using Engine.Domain.Entities;
 using Engine.Domain.ValueObjects;
 
 namespace Engine.Application.Commands;

@@ -1,5 +1,6 @@
 using Engine.Abstractions;
 using Engine.Domain.ValueObjects;
+using Engine.Infrastructure.Contracts;
 using Engine.Infrastructure.CPU;
 using Xunit;
 
@@ -37,7 +38,7 @@ public sealed class DecodedAssetAndResolverTests
     [Fact]
     public async Task AssetResolver_ReturnsDecodedAsset_AndProcessorConvertsToCpuSurface()
     {
-        var reference = new AssetReference(AssetId.New());
+        var reference = new AssetReference(AssetId.New(), "path");
         var resolver = new TestResolver();
         resolver.Set(reference, new DecodedAsset(1, 1, PixelFormat.Rgba8, new byte[] { 10, 20, 30, 40 }));
 

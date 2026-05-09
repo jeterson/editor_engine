@@ -1,7 +1,8 @@
 using Engine.Application.Commanding;
 using Engine.Domain.Entities;
-using Engine.RenderGraph;
 using Engine.Domain.ValueObjects;
+using Engine.RenderGraph;
+using RenderGraphClass = Engine.RenderGraph.RenderGraph;
 
 namespace Engine.Runtime;
 
@@ -12,7 +13,7 @@ public sealed class EditorRenderCoordinator
     private readonly RenderGraphExecutor _executor;
     private readonly IRenderCache _cache;
 
-    private RenderGraph _graph;
+    private RenderGraphClass _graph;
     private RenderInvalidationManager _invalidationManager;
 
     public EditorRenderCoordinator(
@@ -32,7 +33,7 @@ public sealed class EditorRenderCoordinator
         _invalidationManager = new RenderInvalidationManager(_graph);
     }
 
-    public RenderGraph CurrentGraph => _graph;
+    public RenderGraphClass CurrentGraph => _graph;
 
     public async ValueTask<EditorRenderCycleResult> DispatchAndRenderAsync(EditorCommand command, CommandContext context, CancellationToken cancellationToken = default)
     {

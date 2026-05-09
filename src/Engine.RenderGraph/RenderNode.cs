@@ -1,3 +1,5 @@
+using Engine.Domain.ValueObjects;
+
 namespace Engine.RenderGraph;
 
 /// <summary>

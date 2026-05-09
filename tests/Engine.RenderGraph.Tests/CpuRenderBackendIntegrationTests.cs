@@ -1,4 +1,5 @@
 using Engine.Domain.ValueObjects;
+using Engine.Infrastructure.Contracts;
 using Engine.Infrastructure.CPU;
 using Xunit;
 
