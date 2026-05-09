@@ -17,7 +17,13 @@ public sealed class CpuAssetNodeProcessor : ICpuNodeProcessor
     public ValueTask<CpuRenderSurface> ProcessAsync(RenderNode node, RenderExecutionContext context, CancellationToken cancellationToken)
     {
         var assetNode = (AssetRenderNode)node;
-        return _assetResolver.ResolveAsync(assetNode.AssetReference, cancellationToken);
+        return ResolveToSurfaceAsync(assetNode.AssetReference, cancellationToken);
+    }
+
+    private async ValueTask<CpuRenderSurface> ResolveToSurfaceAsync(AssetReference assetReference, CancellationToken cancellationToken)
+    {
+        var decodedAsset = await _assetResolver.ResolveAsync(assetReference, cancellationToken);
+        return CpuRenderSurface.FromDecodedAsset(decodedAsset);
     }
 }
 

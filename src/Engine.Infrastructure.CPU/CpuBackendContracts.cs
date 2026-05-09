@@ -5,7 +5,7 @@ namespace Engine.Infrastructure.CPU;
 
 public interface IAssetResolver
 {
-    ValueTask<CpuRenderSurface> ResolveAsync(AssetReference assetReference, CancellationToken cancellationToken);
+    ValueTask<DecodedAsset> ResolveAsync(AssetReference assetReference, CancellationToken cancellationToken);
 }
 
 public interface ICpuNodeProcessor
