@@ -30,6 +30,8 @@ public sealed class RemoveNodeCommand : UndoableEditorCommand
         {
             throw new InvalidOperationException($"Node with id '{NodeId}' was not found.");
         }
+
+        context.RecordChange(new NodeRemovedChange(NodeId));
     }
 
     public override void Undo(CommandContext context)
