@@ -16,6 +16,7 @@ public sealed class AddNodeCommand : UndoableEditorCommand
     public override void Execute(CommandContext context)
     {
         context.Document.AddNode(Node);
+        context.RecordChange(new NodeAddedChange(Node.Id));
     }
 
     public override void Undo(CommandContext context)
