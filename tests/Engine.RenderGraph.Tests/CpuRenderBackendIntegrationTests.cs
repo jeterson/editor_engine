@@ -80,13 +80,14 @@ public sealed class CpuRenderBackendIntegrationTests
 
     private sealed class InMemoryAssetResolver : IAssetResolver
     {
-        private readonly Dictionary<AssetReference, CpuRenderSurface> _assets = new();
+        private readonly Dictionary<AssetReference, DecodedAsset> _assets = new();
 
-        public void Set(AssetReference reference, CpuRenderSurface surface) => _assets[reference] = surface;
+        public void Set(AssetReference reference, CpuRenderSurface surface)
+            => _assets[reference] = new DecodedAsset(surface.Descriptor.Width, surface.Descriptor.Height, surface.Descriptor.PixelFormat, surface.PixelBytes.ToArray());
 
-        public ValueTask<CpuRenderSurface> ResolveAsync(AssetReference assetReference, CancellationToken cancellationToken)
-            => _assets.TryGetValue(assetReference, out var surface)
-                ? ValueTask.FromResult(surface.Clone())
+        public ValueTask<DecodedAsset> ResolveAsync(AssetReference assetReference, CancellationToken cancellationToken)
+            => _assets.TryGetValue(assetReference, out var asset)
+                ? ValueTask.FromResult(asset)
                 : throw new InvalidOperationException($"Asset not found: {assetReference.AssetId.Value}");
     }
 }

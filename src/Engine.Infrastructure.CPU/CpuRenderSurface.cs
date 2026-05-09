@@ -1,4 +1,5 @@
 using Engine.Abstractions;
+using Engine.RenderGraph;
 
 namespace Engine.Infrastructure.CPU;
 
@@ -25,6 +26,13 @@ public sealed class CpuRenderSurface : IRenderSurface
     public Span<byte> GetWritablePixelSpan() => _pixelBytes;
 
     public CpuRenderSurface Clone() => new(Descriptor, [.. _pixelBytes]);
+
+    public static CpuRenderSurface FromDecodedAsset(DecodedAsset asset, Engine.Abstractions.RenderResourceLifetime lifetime = Engine.Abstractions.RenderResourceLifetime.Transient)
+    {
+        ArgumentNullException.ThrowIfNull(asset);
+        var descriptor = new RenderSurfaceDescriptor(asset.Width, asset.Height, asset.PixelFormat, isHighPrecision: asset.PixelFormat == PixelFormat.Rgba16Float, lifetime);
+        return new CpuRenderSurface(descriptor, asset.PixelBytes.ToArray());
+    }
 
     public static CpuRenderSurface CreateEmpty(int width, int height)
     {
