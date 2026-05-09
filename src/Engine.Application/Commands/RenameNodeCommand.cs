@@ -32,6 +32,7 @@ public sealed class RenameNodeCommand : UndoableEditorCommand
         var node = context.Document.GetNode(NodeId);
         _previousName = node.Name;
         node.Rename(NewName);
+        context.RecordChange(new NodeRenamedChange(NodeId));
     }
 
     public override void Undo(CommandContext context)

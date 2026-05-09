@@ -1,16 +1,25 @@
+using Engine.Domain.ValueObjects;
+
 namespace Engine.RenderGraph;
 
 public sealed class RenderGraph
 {
     private readonly Dictionary<RenderNodeId, RenderNode> _nodes;
+    private readonly Dictionary<DocumentNodeId, IReadOnlyList<RenderNodeId>> _renderNodesByDocumentNode;
 
-    public RenderGraph(IEnumerable<RenderNode> nodes, IReadOnlyList<RenderNodeId> executionOrder)
+    public RenderGraph(
+        IEnumerable<RenderNode> nodes,
+        IReadOnlyList<RenderNodeId> executionOrder,
+        IReadOnlyDictionary<DocumentNodeId, IReadOnlyList<RenderNodeId>>? renderNodesByDocumentNode = null)
     {
         ArgumentNullException.ThrowIfNull(nodes);
         ArgumentNullException.ThrowIfNull(executionOrder);
 
         _nodes = nodes.ToDictionary(node => node.Id);
         ExecutionOrder = executionOrder;
+        _renderNodesByDocumentNode = renderNodesByDocumentNode is null
+            ? new Dictionary<DocumentNodeId, IReadOnlyList<RenderNodeId>>()
+            : new Dictionary<DocumentNodeId, IReadOnlyList<RenderNodeId>>(renderNodesByDocumentNode);
 
         ValidateGraph();
     }
@@ -18,6 +27,7 @@ public sealed class RenderGraph
     public IReadOnlyDictionary<RenderNodeId, RenderNode> Nodes => _nodes;
 
     public IReadOnlyList<RenderNodeId> ExecutionOrder { get; }
+    public IReadOnlyDictionary<DocumentNodeId, IReadOnlyList<RenderNodeId>> RenderNodesByDocumentNode => _renderNodesByDocumentNode;
 
     public RenderNode GetNode(RenderNodeId id) => _nodes[id];
 
