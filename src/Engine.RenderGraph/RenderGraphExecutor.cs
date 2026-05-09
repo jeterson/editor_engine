@@ -1,4 +1,5 @@
 using Engine.Domain.ValueObjects;
+using Engine.RenderGraph.Abstractions;
 
 namespace Engine.RenderGraph;
 

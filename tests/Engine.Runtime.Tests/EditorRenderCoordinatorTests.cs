@@ -6,6 +6,7 @@ using Engine.RenderGraph;
 using Engine.Abstractions;
 using Engine.Runtime;
 using Xunit;
+using Engine.RenderGraph.Abstractions;
 
 namespace Engine.Runtime.Tests;
 

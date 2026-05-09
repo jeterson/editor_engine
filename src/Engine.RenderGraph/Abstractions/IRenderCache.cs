@@ -1,4 +1,4 @@
-namespace Engine.RenderGraph;
+namespace Engine.RenderGraph.Abstractions;
 
 public interface IRenderCache
 {

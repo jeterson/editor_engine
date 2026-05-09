@@ -1,10 +1,17 @@
 using Engine.Domain.Entities;
 using Engine.Domain.ValueObjects;
+using Engine.RenderGraph.Effects;
 
 namespace Engine.RenderGraph;
 
 public sealed class RenderGraphBuilder
 {
+    private readonly EffectRenderNodeFactoryRegistry _effectRenderNodeFactoryRegistry;
+
+    public RenderGraphBuilder(EffectRenderNodeFactoryRegistry effectRenderNodeFactoryRegistry)
+    {
+        _effectRenderNodeFactoryRegistry = effectRenderNodeFactoryRegistry;
+    }
     public RenderGraph Build(EditorDocument document)
     {
         ArgumentNullException.ThrowIfNull(document);
@@ -27,7 +34,7 @@ public sealed class RenderGraphBuilder
         return new RenderGraph(nodes, executionOrder, renderNodesByDocumentNode.ToDictionary(x => x.Key, x => (IReadOnlyList<RenderNodeId>)x.Value));
     }
 
-    private static RenderNodeId BuildPipeline(DocumentNode node, ICollection<RenderNode> nodes, ICollection<RenderNodeId> executionOrder, IDictionary<DocumentNodeId, List<RenderNodeId>> mapping)
+    private RenderNodeId BuildPipeline(DocumentNode node, ICollection<RenderNode> nodes, ICollection<RenderNodeId> executionOrder, IDictionary<DocumentNodeId, List<RenderNodeId>> mapping)
         => node switch
         {
             Layer layer => BuildLayerPipeline(layer, nodes, executionOrder, mapping),
@@ -35,7 +42,7 @@ public sealed class RenderGraphBuilder
             _ => throw new NotSupportedException($"Unsupported document node type '{node.GetType().Name}'.")
         };
 
-    private static RenderNodeId BuildLayerPipeline(Layer layer, ICollection<RenderNode> nodes, ICollection<RenderNodeId> executionOrder, IDictionary<DocumentNodeId, List<RenderNodeId>> mapping)
+    private RenderNodeId BuildLayerPipeline(Layer layer, ICollection<RenderNode> nodes, ICollection<RenderNodeId> executionOrder, IDictionary<DocumentNodeId, List<RenderNodeId>> mapping)
     {
         var nodeIds = EnsureMappingBucket(mapping, layer.Id);
 
@@ -52,7 +59,8 @@ public sealed class RenderGraphBuilder
         RenderNodeId current = transformNode.Id;
         foreach (var effect in layer.EffectStack.Effects.Where(effect => effect.IsEnabled))
         {
-            var effectNode = new EffectRenderNode(RenderNodeId.New(), effect.Id, new[] { current });
+            var effectNode = _effectRenderNodeFactoryRegistry.Create(effect, current);
+
             nodeIds.Add(effectNode.Id);
             nodes.Add(effectNode);
             executionOrder.Add(effectNode.Id);
@@ -66,7 +74,7 @@ public sealed class RenderGraphBuilder
         return compositeNode.Id;
     }
 
-    private static RenderNodeId BuildGroupPipeline(LayerGroup group, ICollection<RenderNode> nodes, ICollection<RenderNodeId> executionOrder, IDictionary<DocumentNodeId, List<RenderNodeId>> mapping)
+    private RenderNodeId BuildGroupPipeline(LayerGroup group, ICollection<RenderNode> nodes, ICollection<RenderNodeId> executionOrder, IDictionary<DocumentNodeId, List<RenderNodeId>> mapping)
     {
         var childDependencies = new List<RenderNodeId>();
         foreach (var child in group.Children)
@@ -81,7 +89,7 @@ public sealed class RenderGraphBuilder
         return compositeNode.Id;
     }
 
-    private static List<RenderNodeId> EnsureMappingBucket(IDictionary<DocumentNodeId, List<RenderNodeId>> mapping, DocumentNodeId nodeId)
+    private List<RenderNodeId> EnsureMappingBucket(IDictionary<DocumentNodeId, List<RenderNodeId>> mapping, DocumentNodeId nodeId)
     {
         if (!mapping.TryGetValue(nodeId, out var nodeIds))
         {

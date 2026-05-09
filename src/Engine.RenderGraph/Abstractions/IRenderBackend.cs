@@ -1,4 +1,4 @@
-namespace Engine.RenderGraph;
+namespace Engine.RenderGraph.Abstractions;
 
 /// <summary>
 /// Abstraction that executes graph nodes without exposing graphics technology details.

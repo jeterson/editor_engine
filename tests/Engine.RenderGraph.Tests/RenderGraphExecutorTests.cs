@@ -1,5 +1,6 @@
 using Engine.Abstractions;
 using Engine.Domain.ValueObjects;
+using Engine.RenderGraph.Abstractions;
 using Xunit;
 
 namespace Engine.RenderGraph.Tests;

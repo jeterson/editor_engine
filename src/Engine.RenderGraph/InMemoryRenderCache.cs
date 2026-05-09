@@ -1,3 +1,5 @@
+using Engine.RenderGraph.Abstractions;
+
 namespace Engine.RenderGraph;
 
 public sealed class InMemoryRenderCache : IRenderCache

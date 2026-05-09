@@ -4,7 +4,7 @@ namespace Engine.Domain.Entities;
 
 public sealed class BrightnessEffect : Effect
 {
-    public BrightnessEffect(EffectId id, bool isEnabled, double intensity)
+    public BrightnessEffect(EffectId id, bool isEnabled, float intensity)
         : base(id, isEnabled)
     {
         if (intensity < -1d || intensity > 1d)
@@ -15,5 +15,5 @@ public sealed class BrightnessEffect : Effect
         Intensity = intensity;
     }
 
-    public double Intensity { get; }
+    public float Intensity { get; }
 }
