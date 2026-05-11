@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Window
+    x:Class="EESample.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:EESample"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="EESample"
+    mc:Ignorable="d">
+
+    <Window.SystemBackdrop>
+        <MicaBackdrop />
+    </Window.SystemBackdrop>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="320" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!--  Sidebar  -->
+        <Border
+            Grid.Column="0"
+            Padding="16"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="0,0,1,0">
+
+            <ScrollViewer>
+                <StackPanel Spacing="16">
+
+                    <TextBlock
+                        FontSize="28"
+                        FontWeight="SemiBold"
+                        Text="Engine Editor" />
+
+                    <Button Command="{x:Bind ViewModel.TesteCommand, Mode=OneWay}" Content="Abrir imagem" />
+
+                    <Slider
+                        x:Name="BrightnessSlider"
+                        Header="Brightness"
+                        Maximum="1"
+                        Minimum="-1"
+                        StepFrequency="0.05"
+                        Value="{x:Bind ViewModel.Brightness, Mode=TwoWay}" />
+
+                    <Button Content="Reset" />
+
+                    <InfoBar
+                        x:Name="StatusInfoBar"
+                        Title="Status"
+                        IsOpen="True"
+                        Message="{x:Bind ViewModel.StatusBarMessage, Mode=OneWay}"
+                        Severity="{x:Bind ViewModel.Severity, Mode=OneWay}" />
+
+                    <StackPanel Spacing="8">
+
+                        <TextBlock FontWeight="SemiBold" Text="Render State" />
+
+                        <TextBlock x:Name="RenderStatusText" Text="{x:Bind ViewModel.RenderStatusText, Mode=OneWay}" />
+
+                        <TextBlock x:Name="NodeCountText" Text="{x:Bind ViewModel.NodeCount, Mode=OneWay}" />
+
+                    </StackPanel>
+
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!--  Preview  -->
+        <Grid Grid.Column="1">
+
+            <ScrollViewer
+                HorizontalScrollBarVisibility="Auto"
+                VerticalScrollBarVisibility="Auto"
+                ZoomMode="Enabled">
+
+                <Grid>
+
+                    <!--  checker background  -->
+                    <Grid>
+
+                        <Grid.Background>
+                            <ImageBrush
+                                AlignmentX="Left"
+                                AlignmentY="Top"
+                                ImageSource="/Assets/checker.png"
+                                Stretch="None" />
+                        </Grid.Background>
+
+                    </Grid>
+
+                    <Image
+                        x:Name="PreviewImage"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Source="{x:Bind ViewModel.Source, Mode=OneWay}"
+                        Stretch="None" />
+
+                </Grid>
+
+            </ScrollViewer>
+
+        </Grid>
+
+    </Grid>
+</Window>

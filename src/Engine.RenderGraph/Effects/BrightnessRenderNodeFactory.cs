@@ -4,7 +4,7 @@ using Engine.RenderGraph.Contracts;
 
 namespace Engine.RenderGraph.Effects;
 
-internal sealed class BrightnessRenderNodeFactory : EffectRenderNodeFactory<BrightnessEffect>
+public sealed class BrightnessRenderNodeFactory : EffectRenderNodeFactory<BrightnessEffect>
 {
     public override RenderNode Create(BrightnessEffect effect, RenderNodeId inputNodeId)
     {

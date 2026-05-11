@@ -4,7 +4,7 @@ using Engine.RenderGraph;
 
 namespace Engine.Infrastructure.Resolvers;
 
-internal class FileAssetResolver(IEnumerable<IImageDecoder> decoders) : IAssetResolver
+public class FileAssetResolver(IEnumerable<IImageDecoder> decoders) : IAssetResolver
 {
     public async ValueTask<DecodedAsset> ResolveAsync(AssetReference assetReference, CancellationToken cancellationToken)
     {

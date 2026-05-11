@@ -1,6 +1,7 @@
 using Engine.Application.Commanding;
 using Engine.Domain.Entities;
 using Engine.RenderGraph;
+using Engine.RenderGraph.Abstractions;
 
 namespace Engine.Runtime;
 

@@ -62,7 +62,7 @@ public sealed class EditorRenderCoordinator
         {
             _graph = _graphBuilder.Build(document);
             _invalidationManager = new RenderInvalidationManager(_graph);
-            invalidatedNodes = _graph.ExecutionOrder.ToArray();
+            invalidatedNodes = _invalidationManager.InvalidateFromDocumentChanges(materializedChanges);
         }
         else
         {
@@ -75,7 +75,7 @@ public sealed class EditorRenderCoordinator
     }
 
     private static bool RequiresGraphRebuild(DocumentChange change)
-        => change is NodeAddedChange or NodeRemovedChange or EffectChangedChange;
+        => change is NodeAddedChange or NodeRemovedChange or EffectChangedChange or EffectParameterChangedChange;
 }
 
 public sealed record EditorRenderCycleResult(

@@ -6,7 +6,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace Engine.Infrastructure.Decoders;
 
-internal class ImageDecoder : IImageDecoder
+public class ImageDecoder : IImageDecoder
 {
     public bool CanDecode(string extension)
     {
