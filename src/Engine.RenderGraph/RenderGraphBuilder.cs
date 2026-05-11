@@ -12,6 +12,10 @@ public sealed class RenderGraphBuilder
     {
         _effectRenderNodeFactoryRegistry = effectRenderNodeFactoryRegistry;
     }
+
+    public RenderGraphBuilder() : this(new EffectRenderNodeFactoryRegistry([new BrightnessRenderNodeFactory()]))
+    {
+    }
     public RenderGraph Build(EditorDocument document)
     {
         ArgumentNullException.ThrowIfNull(document);
@@ -59,7 +63,7 @@ public sealed class RenderGraphBuilder
         RenderNodeId current = transformNode.Id;
         foreach (var effect in layer.EffectStack.Effects.Where(effect => effect.IsEnabled))
         {
-            var effectNode = _effectRenderNodeFactoryRegistry.Create(effect, current);
+            var effectNode = _effectRenderNodeFactoryRegistry.Create(effect, layer.Id, current);
 
             nodeIds.Add(effectNode.Id);
             nodes.Add(effectNode);

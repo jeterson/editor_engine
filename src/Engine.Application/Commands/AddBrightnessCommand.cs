@@ -25,7 +25,7 @@ public class AddBrightnessCommand : UndoableEditorCommand
         var effect = new BrightnessEffect(EffectId.New(), isEnabled: true, _value);
         layer.EffectStack.Add(effect);
 
-        context.RecordChange(new EffectChangedChange(layerId.Value, effect.Id));
+        context.RecordChange(new EffectChangedChange(layerId.Value, effect.Id, nameof(BrightnessEffect)));
     }
 
     public override void Undo(CommandContext context)
@@ -39,6 +39,6 @@ public class AddBrightnessCommand : UndoableEditorCommand
             throw new InvalidOperationException("The are no effect with to undo");
 
         layer.EffectStack.Remove(referenceEffectId.Value);
-        context.RecordChange(new EffectChangedChange(layerId.Value, referenceEffectId.Value));
+        context.RecordChange(new EffectChangedChange(layerId.Value, referenceEffectId.Value, nameof(BrightnessEffect)));
     }
 }

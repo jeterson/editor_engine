@@ -6,8 +6,8 @@ namespace Engine.RenderGraph.Effects;
 
 public sealed class BrightnessRenderNodeFactory : EffectRenderNodeFactory<BrightnessEffect>
 {
-    public override RenderNode Create(BrightnessEffect effect, RenderNodeId inputNodeId)
+    public override RenderNode Create(BrightnessEffect effect, DocumentNodeId sourceDocumentNodeId, RenderNodeId inputNodeId)
     {
-        return new BrightnessRenderNode(RenderNodeId.New(), inputNodeId, effect.Intensity);
+        return new BrightnessRenderNode(RenderNodeId.New(), sourceDocumentNodeId, effect.Id, inputNodeId, effect.Intensity);
     }
 }

@@ -12,7 +12,7 @@ public sealed class EffectRenderNodeFactoryRegistry
     {
         _factories = factories.ToDictionary(x => x.EffectType);
     }
-    public RenderNode Create(Effect effect, RenderNodeId inputNodeId)
+    public RenderNode Create(Effect effect, DocumentNodeId sourceDocumentNodeId, RenderNodeId inputNodeId)
     {
         if (!_factories.TryGetValue(effect.GetType(), out var factory))
         {
@@ -20,6 +20,6 @@ public sealed class EffectRenderNodeFactoryRegistry
                 $"No render node factory registered for '{effect.GetType().Name}'.");
         }
 
-        return factory.Create(effect, inputNodeId);
+        return factory.Create(effect, sourceDocumentNodeId, inputNodeId);
     }
 }

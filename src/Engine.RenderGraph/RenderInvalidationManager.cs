@@ -7,12 +7,14 @@ public sealed class RenderInvalidationManager
 {
     private readonly IReadOnlyDictionary<RenderNodeId, RenderNode> _nodes;
     private readonly Dictionary<RenderNodeId, IReadOnlyList<RenderNodeId>> _dependentsByNode;
+    private readonly IReadOnlyDictionary<RenderNodeSemanticKey, IReadOnlyList<RenderNodeId>> _renderNodesBySemanticKey;
     private readonly IReadOnlyDictionary<DocumentNodeId, IReadOnlyList<RenderNodeId>> _renderNodesByDocumentNode;
 
     public RenderInvalidationManager(RenderGraph graph)
     {
         ArgumentNullException.ThrowIfNull(graph);
         _nodes = graph.Nodes;
+        _renderNodesBySemanticKey = BuildSemanticIndex(graph.Nodes.Values);
         _renderNodesByDocumentNode = graph.RenderNodesByDocumentNode;
         _dependentsByNode = BuildDependentsIndex(graph.Nodes.Values);
     }
@@ -24,10 +26,7 @@ public sealed class RenderInvalidationManager
         var invalidated = new HashSet<RenderNodeId>();
         foreach (var change in changes)
         {
-            if (!_renderNodesByDocumentNode.TryGetValue(change.NodeId, out var mappedNodeIds))
-            {
-                continue;
-            }
+            var mappedNodeIds = ResolveChangedNodes(change);
 
             foreach (var renderNodeId in mappedNodeIds)
             {
@@ -40,6 +39,31 @@ public sealed class RenderInvalidationManager
 
         return invalidated;
     }
+
+    private IReadOnlyCollection<RenderNodeId> ResolveChangedNodes(DocumentChange change)
+    {
+        if (change is EffectParameterChangedChange effectParameterChange)
+        {
+            return GetMappedNodes(new RenderNodeSemanticKey.Effect(effectParameterChange.NodeId, effectParameterChange.EffectId, effectParameterChange.EffectType));
+        }
+
+        if (change is EffectChangedChange effectChange)
+        {
+            return GetMappedNodes(new RenderNodeSemanticKey.Effect(effectChange.NodeId, effectChange.EffectId, effectChange.EffectType));
+        }
+
+        if (change is TransformChangedChange)
+            return GetMappedNodes(new RenderNodeSemanticKey.Transform(change.NodeId));
+        if (change is VisibilityChangedChange)
+            return GetMappedNodes(new RenderNodeSemanticKey.Composite(change.NodeId));
+
+        return _renderNodesByDocumentNode.TryGetValue(change.NodeId, out var mappedNodeIds)
+            ? mappedNodeIds
+            : Array.Empty<RenderNodeId>();
+    }
+
+    private IReadOnlyCollection<RenderNodeId> GetMappedNodes(RenderNodeSemanticKey key)
+        => _renderNodesBySemanticKey.TryGetValue(key, out var nodeIds) ? nodeIds : Array.Empty<RenderNodeId>();
 
     public IReadOnlyCollection<RenderNodeId> InvalidateSubgraph(RenderNodeId changedNodeId)
     {
@@ -82,5 +106,12 @@ public sealed class RenderInvalidationManager
         }
 
         return result.ToDictionary(kvp => kvp.Key, kvp => (IReadOnlyList<RenderNodeId>)kvp.Value);
+    }
+
+    private static IReadOnlyDictionary<RenderNodeSemanticKey, IReadOnlyList<RenderNodeId>> BuildSemanticIndex(IEnumerable<RenderNode> nodes)
+    {
+        return nodes
+            .GroupBy(x => x.SemanticKey)
+            .ToDictionary(x => x.Key, x => (IReadOnlyList<RenderNodeId>)x.Select(y => y.Id).ToArray());
     }
 }
