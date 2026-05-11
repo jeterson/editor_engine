@@ -121,6 +121,7 @@ internal partial class MainPageViewModel : ObservableObject
 
         StatusBarMessage = "Finalizado";
         await RenderToPreviewAsync(surface);
+        UpdateDebugInfo();
     }
 
     private void UpdateDebugInfo()
@@ -144,12 +145,13 @@ internal partial class MainPageViewModel : ObservableObject
     {
         if (surface is CpuRenderSurface cpuSurface)
         {
-            var bitmap = cpuSurface.ToSoftwareBitmap();
+            using var bitmap = cpuSurface.ToSoftwareBitmap();
             var bitmapSource = new SoftwareBitmapSource();
-
             await bitmapSource.SetBitmapAsync(bitmap);
-            Source = null;
+            if (Source is IDisposable disposable)
+                disposable.Dispose();
 
+            Source = null;
             Source = bitmapSource;
         }
     }
