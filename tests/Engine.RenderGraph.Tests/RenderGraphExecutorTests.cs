@@ -80,7 +80,7 @@ public sealed class RenderGraphExecutorTests
     private static RenderGraph CreateLinearGraph()
     {
         var n1 = new AssetRenderNode(RenderNodeId.New(), new AssetReference(AssetId.New()));
-        var n2 = new TransformRenderNode(RenderNodeId.New(), DocumentNodeId.New(), new[] { n1.Id });
+        var n2 = new TransformRenderNode(RenderNodeId.New(), DocumentNodeId.New(), LayerTransform.Identity, new[] { n1.Id });
         var n3 = new CompositeRenderNode(RenderNodeId.New(), DocumentNodeId.New(), new[] { n2.Id });
         return new RenderGraph(new RenderNode[] { n1, n2, n3 }, new[] { n1.Id, n2.Id, n3.Id });
     }

@@ -19,10 +19,12 @@ public sealed class DocumentChangeCommandTests
 
         new RenameNodeCommand(nodeId, "Renamed").Execute(ctx);
         new SetLayerTransformCommand(nodeId, new LayerTransform(10, 20, 2, 2, 90)).Execute(ctx);
+        new RotateLayerCommand(nodeId, 180).Execute(ctx);
         new SetNodeVisibilityCommand(nodeId, false).Execute(ctx);
 
         Assert.Contains(ctx.Changes, x => x is NodeRenamedChange);
         Assert.Contains(ctx.Changes, x => x is TransformChangedChange);
         Assert.Contains(ctx.Changes, x => x is VisibilityChangedChange);
+        Assert.Equal(180, doc.GetLayer(nodeId).Transform.RotationDegrees);
     }
 }

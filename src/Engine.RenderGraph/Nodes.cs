@@ -23,17 +23,24 @@ public sealed class AssetRenderNode : RenderNode
 public sealed class TransformRenderNode : RenderNode
 {
     private readonly IReadOnlyList<KeyValuePair<string, string>> _cacheParameters;
-    public TransformRenderNode(RenderNodeId id, DocumentNodeId sourceDocumentNodeId, IReadOnlyCollection<RenderNodeId> dependencies)
+    public TransformRenderNode(RenderNodeId id, DocumentNodeId sourceDocumentNodeId, LayerTransform transform, IReadOnlyCollection<RenderNodeId> dependencies)
         : base(id, new RenderNodeSemanticKey.Transform(sourceDocumentNodeId), dependencies)
     {
         SourceDocumentNodeId = sourceDocumentNodeId;
+        Transform = transform;
         _cacheParameters = new[]
         {
-            new KeyValuePair<string, string>("source", SourceDocumentNodeId.Value.ToString())
+            new KeyValuePair<string, string>("source", SourceDocumentNodeId.Value.ToString()),
+            new KeyValuePair<string, string>("tx", Transform.TranslationX.ToString("R")),
+            new KeyValuePair<string, string>("ty", Transform.TranslationY.ToString("R")),
+            new KeyValuePair<string, string>("sx", Transform.ScaleX.ToString("R")),
+            new KeyValuePair<string, string>("sy", Transform.ScaleY.ToString("R")),
+            new KeyValuePair<string, string>("rot_deg", Transform.RotationDegrees.ToString("R"))
         };
     }
 
     public DocumentNodeId SourceDocumentNodeId { get; }
+    public LayerTransform Transform { get; }
 
     public override IReadOnlyList<KeyValuePair<string, string>> GetCacheParameters() => _cacheParameters;
 }

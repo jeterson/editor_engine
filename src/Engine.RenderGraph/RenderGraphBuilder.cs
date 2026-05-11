@@ -55,7 +55,7 @@ public sealed class RenderGraphBuilder
         nodes.Add(assetNode);
         executionOrder.Add(assetNode.Id);
 
-        var transformNode = new TransformRenderNode(RenderNodeId.New(), layer.Id, new[] { assetNode.Id });
+        var transformNode = new TransformRenderNode(RenderNodeId.New(), layer.Id, layer.Transform, new[] { assetNode.Id });
         nodeIds.Add(transformNode.Id);
         nodes.Add(transformNode);
         executionOrder.Add(transformNode.Id);
