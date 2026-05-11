@@ -64,7 +64,6 @@ public sealed class Layer : DocumentNode
         ValidateBlendMode(blendMode);
         BlendMode = blendMode;
     }
-
     private static void ValidateBlendMode(BlendMode blendMode)
     {
         if (!Enum.IsDefined(blendMode))

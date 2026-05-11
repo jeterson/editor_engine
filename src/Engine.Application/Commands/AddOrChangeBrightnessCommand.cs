@@ -1,32 +1,32 @@
 ﻿using Engine.Application.Commanding;
 using Engine.Domain.Entities;
+using Engine.Domain.ValueObjects;
 
 namespace Engine.Application.Commands;
 
 public class AddOrChangeBrightnessCommand : UndoableEditorCommand
 {
-    private readonly float _value;
     private EditorCommand? _command;
 
-    public AddOrChangeBrightnessCommand(float value) : base("add.or.change.brightness")
+    public AddOrChangeBrightnessCommand(DocumentNodeId nodeId, float Intensity) : base("add.or.change.brightness")
     {
-        _value = value;
+        NodeId = nodeId;
+        this.Intensity = Intensity;
     }
+
+    public DocumentNodeId NodeId { get; }
+    public float Intensity { get; }
 
     public override void Execute(CommandContext context)
     {
-        var layerId = context.Document.Selection.ActiveNodeId;
-        if (layerId is null)
-            return;
-
-        var layer = context.Document.GetLayer(layerId.Value);
+        var layer = context.Document.GetLayer(NodeId);
 
         var effect = layer.EffectStack.Effects.OfType<BrightnessEffect>().FirstOrDefault();
 
         if (effect is null)
-            _command = new AddBrightnessCommand(_value);
+            _command = new AddBrightnessCommand(NodeId, Intensity);
         else
-            _command = new ChangeBrightnessCommand(_value);
+            _command = new ChangeBrightnessCommand(NodeId, Intensity);
 
         _command.Execute(context);
     }

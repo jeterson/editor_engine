@@ -23,7 +23,7 @@ public sealed class RotateLayerCommand : UndoableEditorCommand
     {
         var layer = context.Document.GetLayer(NodeId);
         _previousTransform = layer.Transform;
-        layer.SetTransform(layer.Transform with { RotationDegrees = RotationDegrees });
+        layer.SetTransform(layer.Transform.WithRotation(RotationDegrees));
         context.RecordChange(new TransformChangedChange(NodeId));
     }
 

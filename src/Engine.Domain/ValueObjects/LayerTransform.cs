@@ -37,6 +37,10 @@ public readonly record struct LayerTransform
     public double Rotation => RotationDegrees;
 
     public static LayerTransform Identity => new(0d, 0d, 1d, 1d, 0d);
+    public LayerTransform WithRotation(double rotateDegress)
+    {
+        return new LayerTransform(TranslationX, TranslationY, ScaleX, ScaleY, rotateDegress);
+    }
 
     private static void EnsureFinite(double value, string paramName)
     {

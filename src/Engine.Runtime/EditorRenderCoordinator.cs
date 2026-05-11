@@ -75,7 +75,7 @@ public sealed class EditorRenderCoordinator
     }
 
     private static bool RequiresGraphRebuild(DocumentChange change)
-        => change is NodeAddedChange or NodeRemovedChange or EffectChangedChange or EffectParameterChangedChange;
+        => change is NodeAddedChange or NodeRemovedChange or EffectChangedChange or EffectParameterChangedChange or TransformChangedChange;
 }
 
 public sealed record EditorRenderCycleResult(
