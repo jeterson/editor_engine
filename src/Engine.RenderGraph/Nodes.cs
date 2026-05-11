@@ -6,7 +6,7 @@ public sealed class AssetRenderNode : RenderNode
 {
     private readonly IReadOnlyList<KeyValuePair<string, string>> _cacheParameters;
     public AssetRenderNode(RenderNodeId id, AssetReference assetReference)
-        : base(id)
+        : base(id, new RenderNodeSemanticKey.Asset(assetReference))
     {
         AssetReference = assetReference;
         _cacheParameters = new[]
@@ -24,7 +24,7 @@ public sealed class TransformRenderNode : RenderNode
 {
     private readonly IReadOnlyList<KeyValuePair<string, string>> _cacheParameters;
     public TransformRenderNode(RenderNodeId id, DocumentNodeId sourceDocumentNodeId, IReadOnlyCollection<RenderNodeId> dependencies)
-        : base(id, dependencies)
+        : base(id, new RenderNodeSemanticKey.Transform(sourceDocumentNodeId), dependencies)
     {
         SourceDocumentNodeId = sourceDocumentNodeId;
         _cacheParameters = new[]
@@ -41,9 +41,10 @@ public sealed class TransformRenderNode : RenderNode
 public sealed class EffectRenderNode : RenderNode
 {
     private readonly IReadOnlyList<KeyValuePair<string, string>> _cacheParameters;
-    public EffectRenderNode(RenderNodeId id, EffectId effectId, IReadOnlyCollection<RenderNodeId> dependencies)
-        : base(id, dependencies)
+    public EffectRenderNode(RenderNodeId id, DocumentNodeId sourceDocumentNodeId, EffectId effectId, IReadOnlyCollection<RenderNodeId> dependencies)
+        : base(id, new RenderNodeSemanticKey.Effect(sourceDocumentNodeId, effectId, GetType().Name), dependencies)
     {
+        SourceDocumentNodeId = sourceDocumentNodeId;
         EffectId = effectId;
         _cacheParameters = new[]
         {
@@ -52,6 +53,7 @@ public sealed class EffectRenderNode : RenderNode
     }
 
     public EffectId EffectId { get; }
+    public DocumentNodeId SourceDocumentNodeId { get; }
 
     public override IReadOnlyList<KeyValuePair<string, string>> GetCacheParameters() => _cacheParameters;
 }
@@ -60,7 +62,7 @@ public sealed class CompositeRenderNode : RenderNode
 {
     private readonly IReadOnlyList<KeyValuePair<string, string>> _cacheParameters;
     public CompositeRenderNode(RenderNodeId id, DocumentNodeId sourceDocumentNodeId, IReadOnlyCollection<RenderNodeId> dependencies)
-        : base(id, dependencies)
+        : base(id, sourceDocumentNodeId == default ? new RenderNodeSemanticKey.RootComposite() : new RenderNodeSemanticKey.Composite(sourceDocumentNodeId), dependencies)
     {
         SourceDocumentNodeId = sourceDocumentNodeId;
         _cacheParameters = new[]

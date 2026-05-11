@@ -28,7 +28,7 @@ public class ChangeBrightnessCommand : UndoableEditorCommand
 
         _previowsEffect = existentEffect.Intensity;
         existentEffect.SetIntensity(_value);
-        context.RecordChange(new EffectParameterChangedChange(layerId.Value, existentEffect.Id));
+        context.RecordChange(new EffectParameterChangedChange(layerId.Value, existentEffect.Id, nameof(BrightnessEffect), nameof(BrightnessEffect.Intensity)));
 
     }
 
@@ -47,7 +47,7 @@ public class ChangeBrightnessCommand : UndoableEditorCommand
 
         existentEffect.SetIntensity(_previowsEffect);
 
-        context.RecordChange(new EffectParameterChangedChange(layerId.Value, existentEffect.Id));
+        context.RecordChange(new EffectParameterChangedChange(layerId.Value, existentEffect.Id, nameof(BrightnessEffect), nameof(BrightnessEffect.Intensity)));
 
     }
 }

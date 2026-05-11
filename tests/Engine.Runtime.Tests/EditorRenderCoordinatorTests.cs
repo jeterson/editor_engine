@@ -45,7 +45,7 @@ public sealed class EditorRenderCoordinatorTests
         var effectId = EffectId.New();
 
         var result = await fixture.Coordinator.ProcessChangesAndRenderAsync(
-            new DocumentChange[] { new EffectParameterChangedChange(fixture.LayerId, effectId) }, fixture.Context.Document);
+            new DocumentChange[] { new EffectParameterChangedChange(fixture.LayerId, effectId, nameof(BrightnessEffect), nameof(BrightnessEffect.Intensity)) }, fixture.Context.Document);
 
         Assert.False(result.GraphRebuilt);
         Assert.NotEmpty(result.InvalidatedNodes);
