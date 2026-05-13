@@ -76,8 +76,33 @@ public sealed class CpuRenderBackendIntegrationTests
         Assert.Equal(4, surface.PixelBytes.Length);
     }
 
+    [Fact]
+    public void TransformProcessor_Rotates90Clockwise_WithoutMutatingInput()
+    {
+        var srcNode = new AssetRenderNode(RenderNodeId.New(), new AssetReference(AssetId.New()));
+        var transformNode = new TransformRenderNode(RenderNodeId.New(), DocumentNodeId.New(), new LayerTransform(0, 0, 1, 1, 90), new[] { srcNode.Id });
+        var source = Surface2x1((255, 0, 0, 255), (0, 255, 0, 255));
+        var sourceSnapshot = source.PixelBytes.ToArray();
+        var context = new RenderExecutionContext(new InMemoryRenderCache());
+        context.SetResult(srcNode.Id, new RenderResult(srcNode.Id, source));
+
+        var output = Assert.IsType<CpuRenderSurface>(new CpuTransformNodeProcessor().ProcessAsync(transformNode, context, CancellationToken.None).Result);
+
+        Assert.Equal(sourceSnapshot, source.PixelBytes.ToArray());
+        Assert.Equal(1, output.Descriptor.Width);
+        Assert.Equal(2, output.Descriptor.Height);
+        Assert.Equal(new byte[] { 255, 0, 0, 255, 0, 255, 0, 255 }, output.PixelBytes.ToArray());
+    }
+
     private static CpuRenderSurface Surface(byte r, byte g, byte b, byte a)
         => new(new Engine.Abstractions.RenderSurfaceDescriptor(1, 1, Engine.Abstractions.PixelFormat.Rgba8, false, Engine.Abstractions.RenderResourceLifetime.Transient), new[] { r, g, b, a });
+
+    private static CpuRenderSurface Surface2x1((byte r, byte g, byte b, byte a) left, (byte r, byte g, byte b, byte a) right)
+        => new(new Engine.Abstractions.RenderSurfaceDescriptor(2, 1, Engine.Abstractions.PixelFormat.Rgba8, false, Engine.Abstractions.RenderResourceLifetime.Transient), new[]
+        {
+            left.r, left.g, left.b, left.a,
+            right.r, right.g, right.b, right.a
+        });
 
     private sealed class InMemoryAssetResolver : IAssetResolver
     {

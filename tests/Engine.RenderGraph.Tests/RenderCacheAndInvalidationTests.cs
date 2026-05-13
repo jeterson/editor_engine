@@ -12,7 +12,7 @@ public sealed class RenderCacheAndInvalidationTests
         var assetNode = new AssetRenderNode(assetNodeId, new AssetReference(AssetId.New()));
         var assetKey = RenderCacheKey.FromNode(assetNode, new Dictionary<RenderNodeId, RenderCacheKey>());
 
-        var transformNode = new TransformRenderNode(RenderNodeId.New(), DocumentNodeId.New(), new[] { assetNodeId });
+        var transformNode = new TransformRenderNode(RenderNodeId.New(), DocumentNodeId.New(), LayerTransform.Identity, new[] { assetNodeId });
         var dependencies = new Dictionary<RenderNodeId, RenderCacheKey> { [assetNodeId] = assetKey };
 
         var first = RenderCacheKey.FromNode(transformNode, dependencies);
@@ -38,6 +38,21 @@ public sealed class RenderCacheAndInvalidationTests
         });
 
         Assert.NotEqual(keyA, keyB);
+    }
+
+    [Fact]
+    public void RenderCacheKey_Changes_WhenTransformParametersChange()
+    {
+        var dependencyId = RenderNodeId.New();
+        var depKey = RenderCacheKey.FromNode(new AssetRenderNode(dependencyId, new AssetReference(AssetId.New())), new Dictionary<RenderNodeId, RenderCacheKey>());
+        var deps = new Dictionary<RenderNodeId, RenderCacheKey> { [dependencyId] = depKey };
+        var n90 = new TransformRenderNode(RenderNodeId.New(), DocumentNodeId.New(), new LayerTransform(0, 0, 1, 1, 90), new[] { dependencyId });
+        var n180 = new TransformRenderNode(RenderNodeId.New(), n90.SourceDocumentNodeId, new LayerTransform(0, 0, 1, 1, 180), new[] { dependencyId });
+
+        var key90 = RenderCacheKey.FromNode(n90, deps);
+        var key180 = RenderCacheKey.FromNode(n180, deps);
+
+        Assert.NotEqual(key90, key180);
     }
 
     [Fact]
@@ -89,7 +104,7 @@ public sealed class RenderCacheAndInvalidationTests
     private static RenderGraph CreateLinearGraph()
     {
         var n1 = new AssetRenderNode(RenderNodeId.New(), new AssetReference(AssetId.New()));
-        var n2 = new TransformRenderNode(RenderNodeId.New(), DocumentNodeId.New(), new[] { n1.Id });
+        var n2 = new TransformRenderNode(RenderNodeId.New(), DocumentNodeId.New(), LayerTransform.Identity, new[] { n1.Id });
         var n3 = new CompositeRenderNode(RenderNodeId.New(), DocumentNodeId.New(), new[] { n2.Id });
         var nodes = new RenderNode[] { n1, n2, n3 };
         var order = new[] { n1.Id, n2.Id, n3.Id };

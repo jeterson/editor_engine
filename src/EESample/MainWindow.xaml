@@ -45,6 +45,19 @@
                         StepFrequency="0.05"
                         Value="{x:Bind ViewModel.Brightness, Mode=TwoWay}" />
 
+                    <StackPanel Orientation="Horizontal">
+                        <Button
+                            Command="{x:Bind ViewModel.RotateCommand}"
+                            CommandParameter="0"
+                            Content="Rotate 0" />
+                        <Button
+                            Command="{x:Bind ViewModel.RotateCommand}"
+                            CommandParameter="90"
+                            Content="Rotate 90" />
+                        <Button Content="Rotate 180" />
+                        <Button Content="Rotate 270" />
+                    </StackPanel>
+
                     <Button Content="Reset" />
 
                     <InfoBar

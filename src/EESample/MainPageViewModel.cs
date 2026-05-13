@@ -137,8 +137,25 @@ internal partial class MainPageViewModel : ObservableObject
     }
     partial void OnBrightnessChanged(double value)
     {
-        var cmd = new AddOrChangeBrightnessCommand((float)value);
+        var selectedNodeId = _session?.Document.Selection.ActiveNodeId;
+        if (selectedNodeId is null)
+            return;
+
+        var cmd = new AddOrChangeBrightnessCommand(selectedNodeId.Value, (float)value);
         _session?.DispatchAndRenderAsync(cmd);
+    }
+    [RelayCommand]
+    public async Task RotateAsync(string degress, CancellationToken cancellationToken)
+    {
+        if (_session is null)
+            return;
+
+        var selectedNodeId = _session.Document.Selection.ActiveNodeId;
+        if (selectedNodeId is null)
+            return;
+
+        var cmd = new RotateLayerCommand(selectedNodeId.Value, double.Parse(degress));
+        await _session.DispatchAndRenderAsync(cmd);
     }
 
     private async Task RenderToPreviewAsync(IRenderSurface surface)

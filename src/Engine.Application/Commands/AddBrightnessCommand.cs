@@ -6,39 +6,34 @@ namespace Engine.Application.Commands;
 
 public class AddBrightnessCommand : UndoableEditorCommand
 {
-    private readonly float _value;
     private EffectId? referenceEffectId;
 
-    public AddBrightnessCommand(float value) : base("add.brightness.command")
+    public AddBrightnessCommand(DocumentNodeId nodeId, float intensity) : base("add.brightness.command")
     {
-        _value = value;
+        NodeId = nodeId;
+        Intensity = intensity;
     }
+
+    public DocumentNodeId NodeId { get; }
+    public float Intensity { get; }
 
     public override void Execute(CommandContext context)
     {
-        var layerId = context.Document.Selection.ActiveNodeId;
-        if (layerId is null)
-            return;
-
-        var layer = context.Document.GetLayer(layerId.Value);
+        var layer = context.Document.GetLayer(NodeId);
         referenceEffectId = EffectId.New();
-        var effect = new BrightnessEffect(EffectId.New(), isEnabled: true, _value);
+        var effect = new BrightnessEffect(EffectId.New(), isEnabled: true, Intensity);
         layer.EffectStack.Add(effect);
 
-        context.RecordChange(new EffectChangedChange(layerId.Value, effect.Id, nameof(BrightnessEffect)));
+        context.RecordChange(new EffectChangedChange(layer.Id, effect.Id, nameof(BrightnessEffect)));
     }
 
     public override void Undo(CommandContext context)
     {
-        var layerId = context.Document.Selection.ActiveNodeId;
-        if (layerId is null)
-            return;
-
-        var layer = context.Document.GetLayer(layerId.Value);
+        var layer = context.Document.GetLayer(NodeId);
         if (referenceEffectId is null)
             throw new InvalidOperationException("The are no effect with to undo");
 
         layer.EffectStack.Remove(referenceEffectId.Value);
-        context.RecordChange(new EffectChangedChange(layerId.Value, referenceEffectId.Value, nameof(BrightnessEffect)));
+        context.RecordChange(new EffectChangedChange(layer.Id, referenceEffectId.Value, nameof(BrightnessEffect)));
     }
 }

@@ -121,6 +121,90 @@ public sealed class CpuTransformNodeProcessor : RenderNodeProcessor<TransformRen
             throw new InvalidOperationException("Transform node dependency is missing or incompatible.");
         }
 
-        return ValueTask.FromResult<IRenderSurface>(source.Clone());
+        return ValueTask.FromResult<IRenderSurface>(ApplyTransform(source, node.Transform));
+    }
+
+    private static CpuRenderSurface ApplyTransform(CpuRenderSurface source, LayerTransform transform)
+    {
+        var normalizedRotation = NormalizeRotation(transform.RotationDegrees);
+        return normalizedRotation switch
+        {
+            0 => source.Clone(),
+            90 => Rotate90(source),
+            180 => Rotate180(source),
+            270 => Rotate270(source),
+            _ => throw new NotSupportedException($"CPU baseline transform supports only 0, 90, 180 and 270 degrees. Received: {transform.RotationDegrees}.")
+        };
+    }
+
+    private static int NormalizeRotation(double rotationDegrees)
+    {
+        var rounded = (int)Math.Round(rotationDegrees);
+        var normalized = ((rounded % 360) + 360) % 360;
+        return normalized;
+    }
+
+    private static CpuRenderSurface Rotate90(CpuRenderSurface source)
+    {
+        var srcWidth = source.Descriptor.Width;
+        var srcHeight = source.Descriptor.Height;
+        var result = new byte[source.PixelBytes.Length];
+        var src = source.PixelBytes.Span;
+        var dstWidth = srcHeight;
+
+        for (var y = 0; y < srcHeight; y++)
+            for (var x = 0; x < srcWidth; x++)
+            {
+                var dstX = srcHeight - 1 - y;
+                var dstY = x;
+                CopyPixel(src, srcWidth, x, y, result, dstWidth, dstX, dstY);
+            }
+
+        return new CpuRenderSurface(new RenderSurfaceDescriptor(srcHeight, srcWidth, source.Descriptor.PixelFormat, source.Descriptor.IsHighPrecision, RenderResourceLifetime.Transient), result);
+    }
+
+    private static CpuRenderSurface Rotate180(CpuRenderSurface source)
+    {
+        var srcWidth = source.Descriptor.Width;
+        var srcHeight = source.Descriptor.Height;
+        var result = new byte[source.PixelBytes.Length];
+        var src = source.PixelBytes.Span;
+        for (var y = 0; y < srcHeight; y++)
+            for (var x = 0; x < srcWidth; x++)
+            {
+                var dstX = srcWidth - 1 - x;
+                var dstY = srcHeight - 1 - y;
+                CopyPixel(src, srcWidth, x, y, result, srcWidth, dstX, dstY);
+            }
+
+        return new CpuRenderSurface(source.Descriptor, result);
+    }
+
+    private static CpuRenderSurface Rotate270(CpuRenderSurface source)
+    {
+        var srcWidth = source.Descriptor.Width;
+        var srcHeight = source.Descriptor.Height;
+        var result = new byte[source.PixelBytes.Length];
+        var src = source.PixelBytes.Span;
+        var dstWidth = srcHeight;
+        for (var y = 0; y < srcHeight; y++)
+            for (var x = 0; x < srcWidth; x++)
+            {
+                var dstX = y;
+                var dstY = srcWidth - 1 - x;
+                CopyPixel(src, srcWidth, x, y, result, dstWidth, dstX, dstY);
+            }
+
+        return new CpuRenderSurface(new RenderSurfaceDescriptor(srcHeight, srcWidth, source.Descriptor.PixelFormat, source.Descriptor.IsHighPrecision, RenderResourceLifetime.Transient), result);
+    }
+
+    private static void CopyPixel(ReadOnlySpan<byte> src, int srcWidth, int srcX, int srcY, Span<byte> dst, int dstWidth, int dstX, int dstY)
+    {
+        var srcIndex = ((srcY * srcWidth) + srcX) * 4;
+        var dstIndex = ((dstY * dstWidth) + dstX) * 4;
+        dst[dstIndex] = src[srcIndex];
+        dst[dstIndex + 1] = src[srcIndex + 1];
+        dst[dstIndex + 2] = src[srcIndex + 2];
+        dst[dstIndex + 3] = src[srcIndex + 3];
     }
 }
