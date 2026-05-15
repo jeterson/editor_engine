@@ -42,6 +42,7 @@
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Engine.Infrastructure.ConfigEngine\Engine.Infrastructure.ConfigEngine.csproj" />
     <ProjectReference Include="..\Engine.Infrastructure.CPU\Engine.Infrastructure.CPU.csproj" />
     <ProjectReference Include="..\Engine.Infrastructure\Engine.Infrastructure.csproj" />
     <ProjectReference Include="..\Engine.RenderGraph\Engine.RenderGraph.csproj" />

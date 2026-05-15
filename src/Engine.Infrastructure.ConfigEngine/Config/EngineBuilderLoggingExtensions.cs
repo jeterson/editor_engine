@@ -1,10 +1,9 @@
 ﻿using Engine.Abstractions.Observability;
 using Engine.Infrastructure.Observability.Render;
-using Engine.Runtime.Config;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace Engine.Infrastructure.Config;
+namespace Engine.Infrastructure.ConfigEngine.Config;
 
 public static class EngineBuilderLoggingExtensions
 {

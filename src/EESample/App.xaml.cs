@@ -1,5 +1,5 @@
 ﻿using Engine.Application.Commanding;
-using Engine.Infrastructure.Config;
+using Engine.Infrastructure.ConfigEngine.Config;
 using Engine.Infrastructure.Contracts;
 using Engine.Infrastructure.CPU;
 using Engine.Infrastructure.Decoders;

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Engine.Runtime.Config;
+namespace Engine.Infrastructure.ConfigEngine.Config;
 
 public interface IEditorEngineBuilder
 {

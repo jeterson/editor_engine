@@ -1,8 +1,7 @@
 ﻿using Engine.Abstractions.Observability;
-using Engine.Runtime.Config;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Engine.Infrastructure.Config;
+namespace Engine.Infrastructure.ConfigEngine.Config;
 
 public static class EngineBuilderTelemetryExtensions
 {

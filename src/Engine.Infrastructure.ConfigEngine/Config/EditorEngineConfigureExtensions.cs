@@ -1,7 +1,6 @@
-﻿using Engine.Runtime.Config;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Engine.Infrastructure.Config;
+namespace Engine.Infrastructure.ConfigEngine.Config;
 
 public static class EditorEngineConfigureExtensions
 {
