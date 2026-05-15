@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine.Infrastructure.CPU\Engine.Infrastructure.CPU.csproj" />
+    <ProjectReference Include="..\Engine.Infrastructure\Engine.Infrastructure.csproj" />
     <ProjectReference Include="..\Engine.RenderGraph\Engine.RenderGraph.csproj" />
     <ProjectReference Include="..\Engine.Runtime\Engine.Runtime.csproj" />
   </ItemGroup>

@@ -52,6 +52,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runtime", "Runtime", "{2D33
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Abstractions", "Abstractions", "{0452FB41-B1DE-4A35-ACFC-AB80C7AA0034}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Infrastructure.Observability", "src\Engine.Infrastructure.Observability\Engine.Infrastructure.Observability.csproj", "{B8B4A588-937A-443C-A93A-8F39BB895731}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -122,6 +124,10 @@ Global
 		{524F3B1E-9F10-4C4D-AC7A-B880B8F43AF5}.Release|Any CPU.ActiveCfg = Release|x64
 		{524F3B1E-9F10-4C4D-AC7A-B880B8F43AF5}.Release|Any CPU.Build.0 = Release|x64
 		{524F3B1E-9F10-4C4D-AC7A-B880B8F43AF5}.Release|Any CPU.Deploy.0 = Release|x64
+		{B8B4A588-937A-443C-A93A-8F39BB895731}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8B4A588-937A-443C-A93A-8F39BB895731}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8B4A588-937A-443C-A93A-8F39BB895731}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8B4A588-937A-443C-A93A-8F39BB895731}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -143,6 +149,7 @@ Global
 		{42B6DE26-8E97-4A7F-9B25-BECC665B4692} = {2D33A682-4CC2-4B29-A88E-D789C2929E5E}
 		{A1F1D7C2-83D3-4B95-996A-CCB4E4CC6A12} = {4ED87275-CD6E-44D0-A647-54FE70D2AD11}
 		{524F3B1E-9F10-4C4D-AC7A-B880B8F43AF5} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{B8B4A588-937A-443C-A93A-8F39BB895731} = {AD05C33A-9C0E-4FB2-A266-281828B4FA0E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AA5B93A8-0BE8-4A3F-AE35-287E6744A731}

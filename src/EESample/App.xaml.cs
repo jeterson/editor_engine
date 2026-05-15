@@ -1,4 +1,5 @@
 ﻿using Engine.Application.Commanding;
+using Engine.Infrastructure.Config;
 using Engine.Infrastructure.Contracts;
 using Engine.Infrastructure.CPU;
 using Engine.Infrastructure.Decoders;
@@ -9,6 +10,7 @@ using Engine.RenderGraph.Contracts;
 using Engine.RenderGraph.Effects;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -51,6 +53,12 @@ namespace EESample
             builder.Services.AddSingleton<IAssetResolver, FileAssetResolver>();
             builder.Services.AddSingleton<IImageDecoder, ImageDecoder>();
 
+            builder.Services.AddLogging(config =>
+            {
+                config.AddConsole();
+            });
+
+            builder.Services.AddEditorEngine();
             HostApp = builder.Build();
 
             ServiceLocator.Init(HostApp.Services);
